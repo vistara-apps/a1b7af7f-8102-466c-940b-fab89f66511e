@@ -21,7 +21,7 @@ export function AlertSystem({ contacts = [], onContactsChange }: AlertSystemProp
     relationship: ''
   });
   const [isLocationEnabled, setIsLocationEnabled] = useState(false);
-  const [currentLocation, setCurrentLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [currentLocation, setCurrentLocation] = useState<{ latitude: number; longitude: number } | null>(null);
   const [isSendingAlert, setIsSendingAlert] = useState(false);
 
   useEffect(() => {
@@ -30,8 +30,8 @@ export function AlertSystem({ contacts = [], onContactsChange }: AlertSystemProp
       getCurrentLocation()
         .then((position) => {
           setCurrentLocation({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
           });
           setIsLocationEnabled(true);
         })

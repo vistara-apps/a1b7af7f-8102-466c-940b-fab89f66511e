@@ -32,7 +32,7 @@ export function QuickActions() {
       // Start recording
       try {
         const locationData = await getCurrentLocation();
-        setLocation({ lat: locationData.latitude, lng: locationData.longitude });
+        setLocation({ lat: locationData.coords.latitude, lng: locationData.coords.longitude });
         setRecordingDuration(0);
         setIsRecording(true);
         
@@ -56,7 +56,7 @@ export function QuickActions() {
   const handleSendAlert = async () => {
     try {
       const locationData = await getCurrentLocation();
-      setLocation({ lat: locationData.latitude, lng: locationData.longitude });
+      setLocation({ lat: locationData.coords.latitude, lng: locationData.coords.longitude });
       setAlertSent(true);
       
       // In a real app, you would send alerts to emergency contacts
@@ -87,7 +87,8 @@ export function QuickActions() {
           <RecordButton
             variant={isRecording ? 'active' : 'inactive'}
             isRecording={isRecording}
-            onToggle={handleToggleRecording}
+            onStartRecording={handleToggleRecording}
+            onStopRecording={handleToggleRecording}
             duration={recordingDuration}
           />
           <p className="text-gray-300 text-sm mt-2">
