@@ -1,6 +1,6 @@
 # KnowYourRightsCard - Base Mini App
 
-A mobile-first application providing instant, understandable legal guidance and documentation tools for citizens encountering law enforcement.
+A production-ready Next.js Base Mini App providing instant, understandable legal guidance and documentation tools for citizens encountering law enforcement.
 
 ## Features
 
