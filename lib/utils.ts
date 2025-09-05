@@ -63,8 +63,10 @@ export async function generateEncounterSummary(
 
 // Send emergency alert
 export async function sendEmergencyAlert(
-  location: { latitude: number; longitude: number },
-  contacts: Array<{ name: string; phone?: string; email?: string }>
+  userId: string,
+  location: { latitude: number; longitude: number; city?: string; state?: string },
+  contacts: Array<{ id: string; name: string; phone?: string; email?: string; relationship: string }>,
+  encounterId?: string
 ): Promise<boolean> {
   try {
     const response = await fetch('/api/send-alert', {
@@ -72,7 +74,7 @@ export async function sendEmergencyAlert(
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ location, contacts }),
+      body: JSON.stringify({ userId, location, contacts, encounterId }),
     });
 
     return response.ok;
@@ -97,4 +99,129 @@ export function getStateFromCoordinates(lat: number, lng: number): string {
   if (lat >= 25.8 && lat <= 36.5 && lng >= -106.6 && lng <= -93.5) return 'TX';
   // Add more state mappings as needed
   return 'Unknown';
+}
+
+// API request helper with error handling
+export async function apiRequest(url: string, options: RequestInit = {}) {
+  try {
+    const response = await fetch(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers,
+      },
+      ...options,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('API request failed:', error);
+    throw error;
+  }
+}
+
+// Local storage helpers with error handling
+export const storage = {
+  get: (key: string) => {
+    try {
+      if (typeof window === 'undefined') return null;
+      const item = localStorage.getItem(key);
+      return item ? JSON.parse(item) : null;
+    } catch (error) {
+      console.error('Error reading from localStorage:', error);
+      return null;
+    }
+  },
+  
+  set: (key: string, value: any) => {
+    try {
+      if (typeof window === 'undefined') return;
+      localStorage.setItem(key, JSON.stringify(value));
+    } catch (error) {
+      console.error('Error writing to localStorage:', error);
+    }
+  },
+  
+  remove: (key: string) => {
+    try {
+      if (typeof window === 'undefined') return;
+      localStorage.removeItem(key);
+    } catch (error) {
+      console.error('Error removing from localStorage:', error);
+    }
+  }
+};
+
+// Format currency
+export function formatCurrency(amount: number): string {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  }).format(amount / 100); // Convert cents to dollars
+}
+
+// Validate phone number (basic US format)
+export function isValidPhoneNumber(phone: string): boolean {
+  const phoneRegex = /^\+?1?[-.\s]?\(?([0-9]{3})\)?[-.\s]?([0-9]{3})[-.\s]?([0-9]{4})$/;
+  return phoneRegex.test(phone);
+}
+
+// Validate email address
+export function isValidEmail(email: string): boolean {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
+// Format location for display
+export function formatLocation(location: { latitude: number; longitude: number; city?: string; state?: string }): string {
+  if (location.city && location.state) {
+    return `${location.city}, ${location.state}`;
+  }
+  return `${location.latitude.toFixed(4)}, ${location.longitude.toFixed(4)}`;
+}
+
+// Copy text to clipboard
+export async function copyToClipboard(text: string): Promise<boolean> {
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } else {
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-999999px';
+      textArea.style.top = '-999999px';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      const result = document.execCommand('copy');
+      textArea.remove();
+      return result;
+    }
+  } catch (error) {
+    console.error('Failed to copy text:', error);
+    return false;
+  }
+}
+
+// Check if feature is available (for progressive enhancement)
+export function isFeatureAvailable(feature: string): boolean {
+  switch (feature) {
+    case 'geolocation':
+      return 'geolocation' in navigator;
+    case 'mediaRecorder':
+      return 'MediaRecorder' in window;
+    case 'notifications':
+      return 'Notification' in window;
+    case 'serviceWorker':
+      return 'serviceWorker' in navigator;
+    default:
+      return false;
+  }
 }
