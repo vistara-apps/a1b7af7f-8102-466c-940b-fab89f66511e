@@ -7,20 +7,10 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'KnowYourRightsCard - Instant Legal Guidance',
-  description: 'Instant legal guidance in your pocket. Know your constitutional rights during police encounters.',
-  keywords: 'legal rights, police encounters, constitutional rights, legal guidance, civil rights',
+  description: 'Mobile-first app providing instant, understandable legal guidance and documentation tools for citizens encountering law enforcement.',
+  keywords: 'legal rights, police encounters, constitutional rights, legal guidance, citizen rights',
   authors: [{ name: 'KnowYourRightsCard Team' }],
-  openGraph: {
-    title: 'KnowYourRightsCard - Instant Legal Guidance',
-    description: 'Instant legal guidance in your pocket. Know your constitutional rights during police encounters.',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'KnowYourRightsCard - Instant Legal Guidance',
-    description: 'Instant legal guidance in your pocket. Know your constitutional rights during police encounters.',
-  },
-  viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
+  viewport: 'width=device-width, initial-scale=1',
 };
 
 export default function RootLayout({

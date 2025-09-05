@@ -12,38 +12,43 @@ interface NavHeaderProps {
 export function NavHeader({ variant = 'default' }: NavHeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const baseClasses = variant === 'transparent' 
+  const navClass = variant === 'transparent' 
     ? 'bg-transparent' 
-    : 'glass-card';
+    : 'nav-header';
 
   return (
-    <nav className={`${baseClasses} sticky top-0 z-50 px-4 py-3`}>
-      <div className="max-w-screen-lg mx-auto flex items-center justify-between">
+    <nav className={navClass}>
+      <div className="flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center space-x-2">
           <Shield className="h-8 w-8 text-white" />
-          <span className="text-xl font-bold text-white">KnowYourRightsCard</span>
+          <span className="text-xl font-bold text-white text-shadow">
+            KnowYourRightsCard
+          </span>
         </div>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center space-x-6">
-          <a href="#home" className="text-white hover:text-purple-200 transition-colors duration-200">
-            Home
-          </a>
-          <a href="#rights" className="text-white hover:text-purple-200 transition-colors duration-200">
-            Rights
-          </a>
           <a href="#guides" className="text-white hover:text-purple-200 transition-colors duration-200">
             Guides
           </a>
-          <a href="#pricing" className="text-white hover:text-purple-200 transition-colors duration-200">
-            Pricing
+          <a href="#rights" className="text-white hover:text-purple-200 transition-colors duration-200">
+            Your Rights
+          </a>
+          <a href="#record" className="text-white hover:text-purple-200 transition-colors duration-200">
+            Record
+          </a>
+          <a href="#alerts" className="text-white hover:text-purple-200 transition-colors duration-200">
+            Alerts
           </a>
           
           {/* Wallet Connection */}
           <Wallet>
-            <ConnectWallet className="btn-secondary">
-              <Name />
+            <ConnectWallet>
+              <div className="flex items-center space-x-2 bg-white bg-opacity-20 px-4 py-2 rounded-lg backdrop-blur-sm border border-white border-opacity-30">
+                <User className="h-4 w-4" />
+                <Name />
+              </div>
             </ConnectWallet>
           </Wallet>
         </div>
@@ -57,44 +62,44 @@ export function NavHeader({ variant = 'default' }: NavHeaderProps) {
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Navigation */}
       {isMenuOpen && (
-        <div className="md:hidden mt-4 pb-4 border-t border-white border-opacity-20">
-          <div className="flex flex-col space-y-4 pt-4">
-            <a 
-              href="#home" 
-              className="text-white hover:text-purple-200 transition-colors duration-200"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Home
-            </a>
-            <a 
-              href="#rights" 
-              className="text-white hover:text-purple-200 transition-colors duration-200"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Rights
-            </a>
+        <div className="md:hidden mt-4 pt-4 border-t border-white border-opacity-20">
+          <div className="flex flex-col space-y-3">
             <a 
               href="#guides" 
-              className="text-white hover:text-purple-200 transition-colors duration-200"
+              className="text-white hover:text-purple-200 transition-colors duration-200 py-2"
               onClick={() => setIsMenuOpen(false)}
             >
               Guides
             </a>
             <a 
-              href="#pricing" 
-              className="text-white hover:text-purple-200 transition-colors duration-200"
+              href="#rights" 
+              className="text-white hover:text-purple-200 transition-colors duration-200 py-2"
               onClick={() => setIsMenuOpen(false)}
             >
-              Pricing
+              Your Rights
+            </a>
+            <a 
+              href="#record" 
+              className="text-white hover:text-purple-200 transition-colors duration-200 py-2"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Record
+            </a>
+            <a 
+              href="#alerts" 
+              className="text-white hover:text-purple-200 transition-colors duration-200 py-2"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Alerts
             </a>
             
             {/* Mobile Wallet Connection */}
             <div className="pt-2">
               <Wallet>
-                <ConnectWallet className="btn-secondary w-full">
-                  <div className="flex items-center justify-center space-x-2">
+                <ConnectWallet>
+                  <div className="flex items-center space-x-2 bg-white bg-opacity-20 px-4 py-2 rounded-lg backdrop-blur-sm border border-white border-opacity-30">
                     <User className="h-4 w-4" />
                     <Name />
                   </div>

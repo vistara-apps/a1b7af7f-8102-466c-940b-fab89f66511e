@@ -38,13 +38,25 @@
     @apply glass-card-dark p-6 hover:bg-opacity-50 transition-all duration-200;
   }
   
-  .feature-card {
+  .nav-header {
+    @apply glass-card px-6 py-4 mb-8;
+  }
+  
+  .guide-card {
     @apply glass-card-dark p-6 hover:bg-opacity-50 transition-all duration-200 cursor-pointer;
+  }
+  
+  .record-button-active {
+    @apply bg-red-500 hover:bg-red-600 animate-pulse-slow;
+  }
+  
+  .record-button-inactive {
+    @apply bg-gray-600 hover:bg-gray-700;
   }
 }
 
 @layer utilities {
-  .text-gradient {
-    @apply bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent;
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   }
 }

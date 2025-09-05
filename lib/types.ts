@@ -22,7 +22,6 @@ export interface Encounter {
   summary?: string;
   alertSent: boolean;
   duration?: number;
-  status: 'active' | 'completed' | 'cancelled';
 }
 
 // Legal guide data model
@@ -32,49 +31,16 @@ export interface LegalGuide {
   content: string;
   state: string;
   language: 'en' | 'es';
-  type: 'rights' | 'scripts' | 'procedures';
+  type: 'basic' | 'traffic' | 'search' | 'arrest';
   isPremium: boolean;
 }
 
-// Component props interfaces
-export interface GuideCardProps {
-  guide: LegalGuide;
-  variant?: 'preview' | 'full';
-  onClick?: () => void;
-}
-
-export interface ActionButtonProps {
-  variant: 'primary' | 'secondary' | 'alert';
-  size?: 'sm' | 'md' | 'lg';
-  disabled?: boolean;
-  loading?: boolean;
-  onClick?: () => void;
-  children: React.ReactNode;
-  className?: string;
-}
-
-export interface RecordButtonProps {
-  variant: 'active' | 'inactive';
+// Recording state
+export interface RecordingState {
   isRecording: boolean;
-  onToggle: () => void;
-  duration?: number;
-}
-
-// API response types
-export interface ApiResponse<T> {
-  data: T;
-  success: boolean;
-  message?: string;
-  error?: string;
-}
-
-// Location data
-export interface LocationData {
-  latitude: number;
-  longitude: number;
-  state?: string;
-  city?: string;
-  accuracy?: number;
+  startTime?: Date;
+  duration: number;
+  audioUrl?: string;
 }
 
 // Alert contact
@@ -86,13 +52,12 @@ export interface AlertContact {
   relationship: string;
 }
 
-// Subscription tiers
-export type SubscriptionTier = 'free' | 'premium';
-
-export interface SubscriptionFeatures {
-  stateSpecificScripts: boolean;
-  advancedRecording: boolean;
-  alertSystem: boolean;
-  aiSummaries: boolean;
-  multiLanguage: boolean;
+// App state
+export interface AppState {
+  user: User | null;
+  currentEncounter: Encounter | null;
+  recordingState: RecordingState;
+  alertContacts: AlertContact[];
+  selectedState: string;
+  isLocationEnabled: boolean;
 }

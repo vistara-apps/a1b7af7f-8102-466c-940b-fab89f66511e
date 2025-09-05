@@ -7,17 +7,16 @@ A mobile-first application providing instant, understandable legal guidance and 
 ### Core Features
 - **Know Your Rights Guides**: Mobile-optimized guides detailing constitutional rights and police encounter procedures
 - **State-Specific Laws & Scripts**: Tailored legal information and dialogue prompts for different US jurisdictions
-- **Quick Record & Share**: One-tap recording with shareable summaries
-- **Location-Based Alert System**: Discreet alerts to trusted contacts with real-time location
+- **Quick Record & Share**: One-tap audio/video recording with AI-generated summaries
+- **Location-Based Alert System**: Emergency alerts to trusted contacts with real-time location
 
 ### Technical Features
 - Built with Next.js 15 and App Router
-- Base blockchain integration via OnchainKit
-- Mobile-first responsive design
+- Base blockchain integration via OnchainKit MiniKit
 - TypeScript for type safety
 - Tailwind CSS with custom design system
-- Real-time location services
-- Audio/video recording capabilities
+- Mobile-first responsive design
+- AI-powered content generation
 
 ## Getting Started
 
@@ -41,16 +40,12 @@ npm install
 
 3. Set up environment variables:
 ```bash
-cp .env.local.example .env.local
+cp .env.example .env.local
 ```
 
-Edit `.env.local` with your API keys:
+Fill in your API keys:
 - `NEXT_PUBLIC_ONCHAINKIT_API_KEY`: Your OnchainKit API key
-- `OPENAI_API_KEY`: OpenAI API key for AI-generated content
-- `NEXT_PUBLIC_SUPABASE_URL`: Supabase project URL
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Supabase anonymous key
-- `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`: Stripe publishable key
-- `STRIPE_SECRET_KEY`: Stripe secret key
+- `OPENAI_API_KEY` or `OPENROUTER_API_KEY`: For AI-generated summaries
 
 4. Run the development server:
 ```bash
@@ -62,128 +57,102 @@ npm run dev
 ## Project Structure
 
 ```
-├── app/                    # Next.js 15 App Router
-│   ├── layout.tsx         # Root layout with providers
-│   ├── page.tsx           # Main homepage
-│   ├── providers.tsx      # MiniKitProvider setup
-│   ├── globals.css        # Global styles with Tailwind
-│   ├── loading.tsx        # Loading UI
-│   └── error.tsx          # Error boundary
-├── components/            # Reusable UI components
-│   ├── NavHeader.tsx      # Navigation header
+├── app/                    # Next.js App Router
+│   ├── api/               # API routes
+│   ├── globals.css        # Global styles
+│   ├── layout.tsx         # Root layout
+│   ├── page.tsx           # Home page
+│   └── providers.tsx      # App providers
+├── components/            # React components
+│   ├── ActionButton.tsx   # Reusable button component
+│   ├── AlertSystem.tsx    # Emergency alert system
 │   ├── GuideCard.tsx      # Legal guide cards
-│   ├── ActionButton.tsx   # Styled action buttons
+│   ├── NavHeader.tsx      # Navigation header
 │   ├── RecordButton.tsx   # Recording interface
-│   ├── MetricCard.tsx     # Statistics cards
-│   ├── FeatureGrid.tsx    # Feature overview grid
-│   ├── QuickActions.tsx   # Emergency action panel
-│   └── RightsGuide.tsx    # Rights information display
+│   └── RightsGuide.tsx    # Constitutional rights guide
 ├── lib/                   # Utilities and types
-│   ├── types.ts           # TypeScript type definitions
-│   ├── constants.ts       # App constants and data
+│   ├── constants.ts       # App constants
+│   ├── types.ts           # TypeScript types
 │   └── utils.ts           # Utility functions
 └── public/               # Static assets
 ```
 
 ## Key Components
 
-### MiniKit Integration
-The app uses OnchainKit's MiniKitProvider for Base blockchain integration:
+### Data Models
+- **User**: User profile with subscription status and preferences
+- **Encounter**: Police encounter records with location and metadata
+- **LegalGuide**: State-specific legal information and scripts
+- **AlertContact**: Emergency contact information
 
-```tsx
-import { MiniKitProvider } from '@coinbase/onchainkit/minikit';
-import { base } from 'wagmi/chains';
+### Core Features Implementation
 
-export function Providers({ children }: { children: ReactNode }) {
-  return (
-    <MiniKitProvider
-      chain={base}
-      apiKey={process.env.NEXT_PUBLIC_ONCHAINKIT_API_KEY || 'cdp_demo_key'}
-    >
-      {children}
-    </MiniKitProvider>
-  );
-}
-```
+#### Recording System
+- One-tap recording with visual feedback
+- Duration tracking and formatting
+- Audio/video capture capabilities
+- AI-generated encounter summaries
 
-### Recording System
-The QuickActions component provides one-tap recording with location capture:
+#### Alert System
+- Location-based emergency alerts
+- Trusted contact management
+- Real-time notification system
+- Integration with SMS/email services
 
-```tsx
-const handleToggleRecording = async () => {
-  if (!isRecording) {
-    const locationData = await getCurrentLocation();
-    setLocation({ lat: locationData.latitude, lng: locationData.longitude });
-    setIsRecording(true);
-  } else {
-    setIsRecording(false);
-    // Save recording and generate summary
-  }
-};
-```
-
-### Rights Guide System
-Expandable sections for different types of legal information:
-
-```tsx
-<RightsGuide />
-```
+#### Legal Guides
+- State-specific legal information
+- Multi-language support (English/Spanish)
+- Premium content gating
+- Interactive scripts and phrases
 
 ## Business Model
 
 - **Free Tier**: Basic constitutional rights guides
-- **Premium Tier ($4.99/month)**: 
-  - State-specific laws and scripts
+- **Premium Tier** ($4.99/month): 
+  - State-specific scripts and laws
   - Advanced recording features
-  - Location-based alert system
+  - Emergency alert system
   - AI-generated summaries
-  - Multi-language support
 
 ## API Integration
 
-### Required APIs
-- **OpenAI**: AI-generated legal summaries and translations
-- **Supabase**: Backend database and authentication
-- **Geolocation API**: Location services for alerts and state-specific content
-- **Stripe**: Payment processing for subscriptions
+### OpenAI/OpenRouter
+- AI-generated encounter summaries
+- Content translation
+- Legal script generation
 
-### Optional Integrations
-- **Farcaster**: Social sharing and community features
-- **Turnkey/Privy**: Advanced wallet management
+### Base Blockchain
+- User authentication via wallet
+- Potential future tokenization
+- Decentralized identity management
 
-## Design System
+### Location Services
+- Real-time location tracking
+- State-specific content delivery
+- Emergency alert positioning
 
-The app uses a custom design system with:
-- **Colors**: Purple-to-pink gradient background with glass morphism cards
-- **Typography**: Inter font with responsive sizing
-- **Components**: Modular, reusable components with consistent styling
-- **Motion**: Smooth transitions with 200ms duration
-- **Layout**: 12-column fluid grid with responsive breakpoints
+## Development
 
-## Deployment
+### Available Scripts
+- `npm run dev`: Start development server
+- `npm run build`: Build for production
+- `npm run start`: Start production server
+- `npm run lint`: Run ESLint
 
-### Vercel (Recommended)
-1. Connect your GitHub repository to Vercel
-2. Set environment variables in Vercel dashboard
-3. Deploy automatically on push to main branch
-
-### Manual Deployment
-```bash
-npm run build
-npm start
-```
+### Environment Variables
+See `.env.example` for required environment variables.
 
 ## Contributing
 
 1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/new-feature`
-3. Commit changes: `git commit -am 'Add new feature'`
-4. Push to branch: `git push origin feature/new-feature`
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
 5. Submit a pull request
 
 ## Legal Disclaimer
 
-This app provides general legal information and should not be considered legal advice. Users should consult with qualified attorneys for specific legal situations. The app is designed to help users understand their constitutional rights but cannot guarantee legal outcomes.
+This app provides general legal information and should not be considered legal advice. Users should consult with qualified attorneys for specific legal situations. The app is designed to help users understand their constitutional rights but does not guarantee legal outcomes.
 
 ## License
 
@@ -191,4 +160,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Support
 
-For support, email support@knowyourrightscard.com or create an issue in the GitHub repository.
+For support, please contact [support@knowyourrightscard.com] or create an issue in this repository.
