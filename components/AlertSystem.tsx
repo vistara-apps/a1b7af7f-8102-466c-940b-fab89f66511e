@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react';
 import { AlertTriangle, MapPin, Phone, Mail, Plus, X, Send } from 'lucide-react';
 import { AlertContact } from '@/lib/types';
-import { getCurrentLocation, sendEmergencyAlert } from '@/lib/utils';
+import { getCurrentLocation } from '@/lib/utils';
+import { useApp } from '@/lib/context/AppContext';
 import { ActionButton } from './ActionButton';
 
 interface AlertSystemProps {
@@ -12,6 +13,7 @@ interface AlertSystemProps {
 }
 
 export function AlertSystem({ contacts = [], onContactsChange }: AlertSystemProps) {
+  const { sendAlert: sendEmergencyAlertViaContext } = useApp();
   const [alertContacts, setAlertContacts] = useState<AlertContact[]>(contacts);
   const [isAddingContact, setIsAddingContact] = useState(false);
   const [newContact, setNewContact] = useState({
@@ -68,11 +70,11 @@ export function AlertSystem({ contacts = [], onContactsChange }: AlertSystemProp
   };
 
   const sendAlert = async () => {
-    if (!currentLocation || alertContacts.length === 0) return;
+    if (alertContacts.length === 0) return;
 
     setIsSendingAlert(true);
     try {
-      const success = await sendEmergencyAlert(currentLocation, alertContacts);
+      const success = await sendEmergencyAlertViaContext();
       if (success) {
         // Show success message
         alert('Emergency alert sent successfully!');
