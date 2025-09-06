@@ -45,7 +45,12 @@ export const stripeHelpers = {
     });
   },
 
-  async createCheckoutSession(customerId: string, priceId: string, successUrl: string, cancelUrl: string) {
+  async createCheckoutSession(
+    customerId: string,
+    priceId: string,
+    successUrl: string,
+    cancelUrl: string
+  ) {
     return await stripe.checkout.sessions.create({
       customer: customerId,
       payment_method_types: ['card'],
@@ -68,7 +73,7 @@ export const stripeHelpers = {
 
   async updateSubscription(subscriptionId: string, priceId: string) {
     const subscription = await stripe.subscriptions.retrieve(subscriptionId);
-    
+
     return await stripe.subscriptions.update(subscriptionId, {
       items: [
         {

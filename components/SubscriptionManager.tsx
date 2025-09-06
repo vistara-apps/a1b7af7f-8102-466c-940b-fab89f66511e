@@ -24,44 +24,44 @@ export function SubscriptionManager({ onClose }: SubscriptionManagerProps) {
       name: 'Basic Rights Guides',
       free: true,
       premium: true,
-      description: 'Constitutional rights overview'
+      description: 'Constitutional rights overview',
     },
     {
       name: 'State-Specific Scripts',
       free: false,
       premium: true,
-      description: 'Tailored legal scripts for your state'
+      description: 'Tailored legal scripts for your state',
     },
     {
       name: 'Advanced Recording Features',
       free: false,
       premium: true,
-      description: 'Enhanced audio recording with cloud backup'
+      description: 'Enhanced audio recording with cloud backup',
     },
     {
       name: 'Emergency Alert System',
       free: false,
       premium: true,
-      description: 'Real-time location alerts to contacts'
+      description: 'Real-time location alerts to contacts',
     },
     {
       name: 'AI-Generated Summaries',
       free: false,
       premium: true,
-      description: 'Professional encounter documentation'
+      description: 'Professional encounter documentation',
     },
     {
       name: 'Multi-Language Support',
       free: false,
       premium: true,
-      description: 'Spanish translations and scripts'
+      description: 'Spanish translations and scripts',
     },
     {
       name: 'Priority Support',
       free: false,
       premium: true,
-      description: '24/7 customer support access'
-    }
+      description: '24/7 customer support access',
+    },
   ];
 
   const handleUpgrade = async () => {
@@ -127,10 +127,9 @@ export function SubscriptionManager({ onClose }: SubscriptionManagerProps) {
                   {isPremium ? 'Premium Subscription' : 'Upgrade to Premium'}
                 </h2>
                 <p className="text-purple-100">
-                  {isPremium 
+                  {isPremium
                     ? 'You have access to all premium features'
-                    : 'Unlock advanced legal protection tools'
-                  }
+                    : 'Unlock advanced legal protection tools'}
                 </p>
               </div>
             </div>
@@ -170,14 +169,18 @@ export function SubscriptionManager({ onClose }: SubscriptionManagerProps) {
                 <div className="text-3xl font-bold text-gray-900 mt-2">$0</div>
                 <p className="text-gray-500">Basic legal guidance</p>
               </div>
-              
+
               <ul className="space-y-3">
-                {features.filter(f => f.free).map((feature, index) => (
-                  <li key={index} className="flex items-center space-x-2">
-                    <Check className="h-4 w-4 text-green-500 flex-shrink-0" />
-                    <span className="text-sm text-gray-700">{feature.name}</span>
-                  </li>
-                ))}
+                {features
+                  .filter((f) => f.free)
+                  .map((feature, index) => (
+                    <li key={index} className="flex items-center space-x-2">
+                      <Check className="h-4 w-4 text-green-500 flex-shrink-0" />
+                      <span className="text-sm text-gray-700">
+                        {feature.name}
+                      </span>
+                    </li>
+                  ))}
               </ul>
             </div>
 
@@ -188,16 +191,18 @@ export function SubscriptionManager({ onClose }: SubscriptionManagerProps) {
                   Recommended
                 </span>
               </div>
-              
+
               <div className="text-center mb-4">
                 <h3 className="text-xl font-semibold text-gray-900">Premium</h3>
                 <div className="text-3xl font-bold text-gray-900 mt-2">
                   $4.99
-                  <span className="text-lg font-normal text-gray-500">/month</span>
+                  <span className="text-lg font-normal text-gray-500">
+                    /month
+                  </span>
                 </div>
                 <p className="text-gray-500">Complete legal protection</p>
               </div>
-              
+
               <ul className="space-y-3 mb-6">
                 {features.map((feature, index) => (
                   <li key={index} className="flex items-center space-x-2">
@@ -206,7 +211,9 @@ export function SubscriptionManager({ onClose }: SubscriptionManagerProps) {
                     ) : (
                       <X className="h-4 w-4 text-gray-300 flex-shrink-0" />
                     )}
-                    <span className={`text-sm ${feature.premium ? 'text-gray-700' : 'text-gray-400'}`}>
+                    <span
+                      className={`text-sm ${feature.premium ? 'text-gray-700' : 'text-gray-400'}`}
+                    >
                       {feature.name}
                     </span>
                   </li>
@@ -223,7 +230,7 @@ export function SubscriptionManager({ onClose }: SubscriptionManagerProps) {
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                     required
                   />
-                  
+
                   <button
                     onClick={handleUpgrade}
                     disabled={isLoading || !email}
@@ -248,7 +255,7 @@ export function SubscriptionManager({ onClose }: SubscriptionManagerProps) {
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
               Feature Comparison
             </h3>
-            
+
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
@@ -263,8 +270,12 @@ export function SubscriptionManager({ onClose }: SubscriptionManagerProps) {
                     <tr key={index} className="border-b border-gray-100">
                       <td className="py-3">
                         <div>
-                          <div className="font-medium text-gray-900">{feature.name}</div>
-                          <div className="text-sm text-gray-500">{feature.description}</div>
+                          <div className="font-medium text-gray-900">
+                            {feature.name}
+                          </div>
+                          <div className="text-sm text-gray-500">
+                            {feature.description}
+                          </div>
                         </div>
                       </td>
                       <td className="text-center py-3">
@@ -303,7 +314,8 @@ export function SubscriptionManager({ onClose }: SubscriptionManagerProps) {
             <p>
               🔒 Secure payment processing by Stripe. Cancel anytime.
               <br />
-              Your subscription helps us maintain and improve our legal guidance services.
+              Your subscription helps us maintain and improve our legal guidance
+              services.
             </p>
           </div>
         </div>

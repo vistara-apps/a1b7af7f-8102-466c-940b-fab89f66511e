@@ -63,22 +63,26 @@ export async function POST(request: NextRequest) {
     } else {
       // Update existing encounter to mark alert as sent
       try {
-        await dbHelpers.updateEncounter(currentEncounterId, { alert_sent: true });
+        await dbHelpers.updateEncounter(currentEncounterId, {
+          alert_sent: true,
+        });
       } catch (dbError) {
         console.error('Error updating encounter:', dbError);
       }
     }
 
     // Generate location string for human readability
-    const locationString = location.city && location.state 
-      ? `${location.city}, ${location.state}` 
-      : `${location.latitude}, ${location.longitude}`;
+    const locationString =
+      location.city && location.state
+        ? `${location.city}, ${location.state}`
+        : `${location.latitude}, ${location.longitude}`;
 
     // Create alert message
-    const alertMessage = message || 
+    const alertMessage =
+      message ||
       `🚨 EMERGENCY ALERT: I have triggered an emergency alert during a police encounter. ` +
-      `Location: ${locationString}. Time: ${new Date(timestamp).toLocaleString()}. ` +
-      `Please check on me immediately. If you cannot reach me, consider contacting local authorities.`;
+        `Location: ${locationString}. Time: ${new Date(timestamp).toLocaleString()}. ` +
+        `Please check on me immediately. If you cannot reach me, consider contacting local authorities.`;
 
     // Send alerts to all contacts
     const alertPromises = contacts.map(async (contact: AlertContact) => {
@@ -101,8 +105,11 @@ export async function POST(request: NextRequest) {
           //   from: process.env.TWILIO_PHONE_NUMBER,
           //   to: contact.phone
           // });
-          
-          console.log(`SMS Alert sent to ${contact.name} (${contact.phone}):`, alertMessage);
+
+          console.log(
+            `SMS Alert sent to ${contact.name} (${contact.phone}):`,
+            alertMessage
+          );
           contactResult.smsStatus = 'sent';
         }
 
@@ -116,15 +123,19 @@ export async function POST(request: NextRequest) {
           //   text: alertMessage,
           //   html: `<p><strong>${alertMessage}</strong></p>`
           // });
-          
-          console.log(`Email Alert sent to ${contact.name} (${contact.email}):`, alertMessage);
+
+          console.log(
+            `Email Alert sent to ${contact.name} (${contact.email}):`,
+            alertMessage
+          );
           contactResult.emailStatus = 'sent';
         }
 
         return contactResult;
       } catch (error) {
         console.error(`Error sending alert to ${contact.name}:`, error);
-        contactResult.error = error instanceof Error ? error.message : 'Unknown error';
+        contactResult.error =
+          error instanceof Error ? error.message : 'Unknown error';
         return contactResult;
       }
     });
@@ -139,7 +150,7 @@ export async function POST(request: NextRequest) {
       location,
       contactCount: contacts.length,
       timestamp,
-      results
+      results,
     });
 
     // Calculate success metrics
@@ -148,12 +159,14 @@ export async function POST(request: NextRequest) {
     }, 0);
 
     const successfulSends = results.reduce((acc, result) => {
-      return acc + 
-        (result.smsStatus === 'sent' ? 1 : 0) + 
-        (result.emailStatus === 'sent' ? 1 : 0);
+      return (
+        acc +
+        (result.smsStatus === 'sent' ? 1 : 0) +
+        (result.emailStatus === 'sent' ? 1 : 0)
+      );
     }, 0);
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       success: true,
       alertId,
       encounterId: currentEncounterId,
@@ -164,18 +177,18 @@ export async function POST(request: NextRequest) {
         contactsNotified: contacts.length,
         totalAttempts,
         successfulSends,
-        failedSends: totalAttempts - successfulSends
+        failedSends: totalAttempts - successfulSends,
       },
-      results 
+      results,
     });
   } catch (error) {
     console.error('Error sending emergency alert:', error);
-    
+
     return NextResponse.json(
-      { 
+      {
         error: 'Failed to send emergency alert',
         details: error instanceof Error ? error.message : 'Unknown error',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       },
       { status: 500 }
     );

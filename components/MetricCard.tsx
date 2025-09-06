@@ -11,7 +11,14 @@ interface MetricCardProps {
   icon?: React.ReactNode;
 }
 
-export function MetricCard({ title, value, change, trend, description, icon }: MetricCardProps) {
+export function MetricCard({
+  title,
+  value,
+  change,
+  trend,
+  description,
+  icon,
+}: MetricCardProps) {
   const trendColor = trend === 'up' ? 'text-green-400' : 'text-red-400';
   const TrendIcon = trend === 'up' ? TrendingUp : TrendingDown;
 
@@ -22,13 +29,9 @@ export function MetricCard({ title, value, change, trend, description, icon }: M
           <h3 className="text-white text-lg font-semibold mb-1">{title}</h3>
           <p className="text-gray-300 text-sm">{description}</p>
         </div>
-        {icon && (
-          <div className="text-purple-300">
-            {icon}
-          </div>
-        )}
+        {icon && <div className="text-purple-300">{icon}</div>}
       </div>
-      
+
       <div className="flex items-end justify-between">
         <div>
           <div className="text-3xl font-bold text-white mb-1">{value}</div>

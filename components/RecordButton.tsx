@@ -17,16 +17,16 @@ export function RecordButton({
   onStartRecording,
   onStopRecording,
   isRecording = false,
-  duration = 0
+  duration = 0,
 }: RecordButtonProps) {
   const [internalDuration, setInternalDuration] = useState(0);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
-    
+
     if (isRecording) {
       interval = setInterval(() => {
-        setInternalDuration(prev => prev + 1);
+        setInternalDuration((prev) => prev + 1);
       }, 1000);
     } else {
       setInternalDuration(0);
@@ -63,7 +63,7 @@ export function RecordButton({
         ) : (
           <Mic className="h-8 w-8" />
         )}
-        
+
         {isRecording && (
           <div className="absolute -inset-2 rounded-full border-2 border-red-400 animate-ping opacity-75" />
         )}

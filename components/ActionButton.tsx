@@ -22,20 +22,21 @@ export function ActionButton({
   onClick,
   children,
   className = '',
-  fullWidth = false
+  fullWidth = false,
 }: ActionButtonProps) {
-  const baseClasses = 'inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed';
-  
+  const baseClasses =
+    'inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed';
+
   const variantClasses = {
     primary: 'btn-primary',
     secondary: 'btn-secondary',
-    alert: 'btn-alert'
+    alert: 'btn-alert',
   };
 
   const sizeClasses = {
     sm: 'px-3 py-2 text-sm rounded-md',
     md: 'px-6 py-3 text-base rounded-lg',
-    lg: 'px-8 py-4 text-lg rounded-xl'
+    lg: 'px-8 py-4 text-lg rounded-xl',
   };
 
   const widthClass = fullWidth ? 'w-full' : '';
@@ -54,9 +55,7 @@ export function ActionButton({
       onClick={onClick}
       disabled={disabled || loading}
     >
-      {loading && (
-        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-      )}
+      {loading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
       {children}
     </button>
   );

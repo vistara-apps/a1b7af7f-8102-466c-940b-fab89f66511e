@@ -1,7 +1,15 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Shield, BookOpen, Mic, AlertTriangle, TrendingUp, BarChart3, MapPin } from 'lucide-react';
+import {
+  Shield,
+  BookOpen,
+  Mic,
+  AlertTriangle,
+  TrendingUp,
+  BarChart3,
+  MapPin,
+} from 'lucide-react';
 import { useMiniKit } from '@coinbase/onchainkit/minikit';
 import { NavHeader } from '@/components/NavHeader';
 import { GuideCard } from '@/components/GuideCard';
@@ -14,11 +22,13 @@ import { US_STATES } from '@/lib/constants';
 
 export default function HomePage() {
   const { setFrameReady } = useMiniKit();
-  const [activeTab, setActiveTab] = useState<'home' | 'guides' | 'rights' | 'record' | 'alerts'>('home');
+  const [activeTab, setActiveTab] = useState<
+    'home' | 'guides' | 'rights' | 'record' | 'alerts'
+  >('home');
   const [user, setUser] = useState<User | null>(null);
   const [recordingState, setRecordingState] = useState<RecordingState>({
     isRecording: false,
-    duration: 0
+    duration: 0,
   });
   const [alertContacts, setAlertContacts] = useState<AlertContact[]>([]);
   const [selectedState, setSelectedState] = useState('CA');
@@ -28,30 +38,33 @@ export default function HomePage() {
     {
       guideId: '1',
       title: 'Traffic Stop Rights',
-      content: 'During a traffic stop, you have the right to remain silent beyond providing your license, registration, and insurance. You can refuse consent to search your vehicle.',
+      content:
+        'During a traffic stop, you have the right to remain silent beyond providing your license, registration, and insurance. You can refuse consent to search your vehicle.',
       state: 'CA',
       language: 'en',
       type: 'traffic',
-      isPremium: false
+      isPremium: false,
     },
     {
       guideId: '2',
       title: 'Search and Seizure Protection',
-      content: 'The Fourth Amendment protects you from unreasonable searches. Police need a warrant, probable cause, or your consent to search your property.',
+      content:
+        'The Fourth Amendment protects you from unreasonable searches. Police need a warrant, probable cause, or your consent to search your property.',
       state: 'CA',
       language: 'en',
       type: 'search',
-      isPremium: true
+      isPremium: true,
     },
     {
       guideId: '3',
       title: 'Arrest Procedures',
-      content: 'If you are arrested, you have the right to remain silent and the right to an attorney. Ask for a lawyer immediately and do not answer questions without one present.',
+      content:
+        'If you are arrested, you have the right to remain silent and the right to an attorney. Ask for a lawyer immediately and do not answer questions without one present.',
       state: 'CA',
       language: 'en',
       type: 'arrest',
-      isPremium: true
-    }
+      isPremium: true,
+    },
   ]);
 
   useEffect(() => {
@@ -64,7 +77,7 @@ export default function HomePage() {
       userId: 'demo-user',
       subscriptionStatus: 'free',
       preferredLanguage: 'en',
-      savedStateLaws: ['CA']
+      savedStateLaws: ['CA'],
     });
   }, []);
 
@@ -72,14 +85,14 @@ export default function HomePage() {
     setRecordingState({
       isRecording: true,
       startTime: new Date(),
-      duration: 0
+      duration: 0,
     });
   };
 
   const handleStopRecording = () => {
     setRecordingState({
       isRecording: false,
-      duration: 0
+      duration: 0,
     });
   };
 
@@ -99,15 +112,15 @@ export default function HomePage() {
           Instant legal guidance in your pocket
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <ActionButton 
-            variant="primary" 
+          <ActionButton
+            variant="primary"
             onClick={() => setActiveTab('guides')}
           >
             <BookOpen className="h-5 w-5 mr-2" />
             Read Guides
           </ActionButton>
-          <ActionButton 
-            variant="secondary" 
+          <ActionButton
+            variant="secondary"
             onClick={() => setActiveTab('rights')}
           >
             <Shield className="h-5 w-5 mr-2" />
@@ -123,7 +136,9 @@ export default function HomePage() {
           <div className="flex items-center space-x-3 mb-4">
             <Shield className="h-8 w-8 text-purple-400" />
             <div>
-              <h3 className="text-lg font-semibold text-white">Constitutional Rights</h3>
+              <h3 className="text-lg font-semibold text-white">
+                Constitutional Rights
+              </h3>
               <p className="text-sm text-gray-300">One-page guides</p>
             </div>
           </div>
@@ -134,9 +149,9 @@ export default function HomePage() {
           <p className="text-sm text-gray-400 mb-4">
             Users report increased confidence during police encounters
           </p>
-          <ActionButton 
-            variant="primary" 
-            size="sm" 
+          <ActionButton
+            variant="primary"
+            size="sm"
             onClick={() => setActiveTab('rights')}
           >
             View Rights
@@ -148,7 +163,9 @@ export default function HomePage() {
           <div className="flex items-center space-x-3 mb-4">
             <Mic className="h-8 w-8 text-red-400" />
             <div>
-              <h3 className="text-lg font-semibold text-white">What to NOT say</h3>
+              <h3 className="text-lg font-semibold text-white">
+                What to NOT say
+              </h3>
               <p className="text-sm text-gray-300">One-tap recording</p>
             </div>
           </div>
@@ -159,9 +176,9 @@ export default function HomePage() {
           <p className="text-sm text-gray-400 mb-4">
             Increase in successful evidence documentation
           </p>
-          <ActionButton 
-            variant="primary" 
-            size="sm" 
+          <ActionButton
+            variant="primary"
+            size="sm"
             onClick={() => setActiveTab('record')}
           >
             Start Recording
@@ -173,7 +190,9 @@ export default function HomePage() {
           <div className="flex items-center space-x-3 mb-4">
             <MapPin className="h-8 w-8 text-green-400" />
             <div>
-              <h3 className="text-lg font-semibold text-white">Location Alerts</h3>
+              <h3 className="text-lg font-semibold text-white">
+                Location Alerts
+              </h3>
               <p className="text-sm text-gray-300">Emergency contacts</p>
             </div>
           </div>
@@ -183,9 +202,9 @@ export default function HomePage() {
           <p className="text-sm text-gray-400 mb-4">
             Instant notification to trusted contacts during encounters
           </p>
-          <ActionButton 
-            variant="primary" 
-            size="sm" 
+          <ActionButton
+            variant="primary"
+            size="sm"
             onClick={() => setActiveTab('alerts')}
           >
             Setup Alerts
@@ -241,7 +260,9 @@ export default function HomePage() {
 
       {/* State Selector */}
       <div className="glass-card-dark p-4">
-        <label className="block text-white font-medium mb-2">Select Your State:</label>
+        <label className="block text-white font-medium mb-2">
+          Select Your State:
+        </label>
         <select
           value={selectedState}
           onChange={(e) => setSelectedState(e.target.value)}
@@ -258,7 +279,7 @@ export default function HomePage() {
       {/* Guides List */}
       <div className="space-y-4">
         {legalGuides
-          .filter(guide => guide.state === selectedState)
+          .filter((guide) => guide.state === selectedState)
           .map((guide) => (
             <GuideCard
               key={guide.guideId}
@@ -270,15 +291,14 @@ export default function HomePage() {
           ))}
       </div>
 
-      {legalGuides.filter(guide => guide.state === selectedState).length === 0 && (
+      {legalGuides.filter((guide) => guide.state === selectedState).length ===
+        0 && (
         <div className="text-center py-12">
           <BookOpen className="h-16 w-16 text-gray-400 mx-auto mb-4" />
           <p className="text-gray-400 text-lg">
             No guides available for {selectedState} yet
           </p>
-          <p className="text-gray-500">
-            More states coming soon!
-          </p>
+          <p className="text-gray-500">More states coming soon!</p>
         </div>
       )}
     </div>
@@ -304,7 +324,9 @@ export default function HomePage() {
 
       {/* Recording Tips */}
       <div className="glass-card-dark p-6">
-        <h3 className="text-xl font-semibold text-white mb-4">Recording Tips</h3>
+        <h3 className="text-xl font-semibold text-white mb-4">
+          Recording Tips
+        </h3>
         <ul className="space-y-3 text-gray-300">
           <li className="flex items-start space-x-2">
             <div className="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0"></div>
@@ -328,7 +350,9 @@ export default function HomePage() {
       {/* Legal Notice */}
       <div className="glass-card-dark p-4 border-l-4 border-yellow-400">
         <p className="text-yellow-200 text-sm">
-          <strong>Legal Notice:</strong> Recording laws vary by state. In most states, you have the right to record police in public spaces. Always comply with lawful orders while exercising your rights.
+          <strong>Legal Notice:</strong> Recording laws vary by state. In most
+          states, you have the right to record police in public spaces. Always
+          comply with lawful orders while exercising your rights.
         </p>
       </div>
     </div>
@@ -347,7 +371,7 @@ export default function HomePage() {
               { id: 'guides', label: 'Guides', icon: BookOpen },
               { id: 'rights', label: 'Rights', icon: Shield },
               { id: 'record', label: 'Record', icon: Mic },
-              { id: 'alerts', label: 'Alerts', icon: AlertTriangle }
+              { id: 'alerts', label: 'Alerts', icon: AlertTriangle },
             ].map(({ id, label, icon: Icon }) => (
               <button
                 key={id}
@@ -370,14 +394,14 @@ export default function HomePage() {
           {activeTab === 'home' && renderHomeContent()}
           {activeTab === 'guides' && renderGuidesContent()}
           {activeTab === 'rights' && (
-            <RightsGuide 
+            <RightsGuide
               language={user?.preferredLanguage || 'en'}
               userIsPremium={user?.subscriptionStatus === 'premium'}
             />
           )}
           {activeTab === 'record' && renderRecordContent()}
           {activeTab === 'alerts' && (
-            <AlertSystem 
+            <AlertSystem
               contacts={alertContacts}
               onContactsChange={setAlertContacts}
             />

@@ -5,12 +5,14 @@ A production-ready Next.js Base Mini App providing instant, understandable legal
 ## Features
 
 ### Core Features
+
 - **Know Your Rights Guides**: Mobile-optimized guides detailing constitutional rights and police encounter procedures
 - **State-Specific Laws & Scripts**: Tailored legal information and dialogue prompts for different US jurisdictions
 - **Quick Record & Share**: One-tap audio/video recording with AI-generated summaries
 - **Location-Based Alert System**: Emergency alerts to trusted contacts with real-time location
 
 ### Technical Features
+
 - Built with Next.js 15 and App Router
 - Base blockchain integration via OnchainKit MiniKit
 - TypeScript for type safety
@@ -21,33 +23,39 @@ A production-ready Next.js Base Mini App providing instant, understandable legal
 ## Getting Started
 
 ### Prerequisites
-- Node.js 18+ 
+
+- Node.js 18+
 - npm or yarn
 - Base wallet for testing
 
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone <repository-url>
 cd knowyourrightscard
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Set up environment variables:
+
 ```bash
 cp .env.example .env.local
 ```
 
 Fill in your API keys:
+
 - `NEXT_PUBLIC_ONCHAINKIT_API_KEY`: Your OnchainKit API key
 - `OPENAI_API_KEY` or `OPENROUTER_API_KEY`: For AI-generated summaries
 
 4. Run the development server:
+
 ```bash
 npm run dev
 ```
@@ -80,6 +88,7 @@ npm run dev
 ## Key Components
 
 ### Data Models
+
 - **User**: User profile with subscription status and preferences
 - **Encounter**: Police encounter records with location and metadata
 - **LegalGuide**: State-specific legal information and scripts
@@ -88,18 +97,21 @@ npm run dev
 ### Core Features Implementation
 
 #### Recording System
+
 - One-tap recording with visual feedback
 - Duration tracking and formatting
 - Audio/video capture capabilities
 - AI-generated encounter summaries
 
 #### Alert System
+
 - Location-based emergency alerts
 - Trusted contact management
 - Real-time notification system
 - Integration with SMS/email services
 
 #### Legal Guides
+
 - State-specific legal information
 - Multi-language support (English/Spanish)
 - Premium content gating
@@ -108,7 +120,7 @@ npm run dev
 ## Business Model
 
 - **Free Tier**: Basic constitutional rights guides
-- **Premium Tier** ($4.99/month): 
+- **Premium Tier** ($4.99/month):
   - State-specific scripts and laws
   - Advanced recording features
   - Emergency alert system
@@ -117,16 +129,19 @@ npm run dev
 ## API Integration
 
 ### OpenAI/OpenRouter
+
 - AI-generated encounter summaries
 - Content translation
 - Legal script generation
 
 ### Base Blockchain
+
 - User authentication via wallet
 - Potential future tokenization
 - Decentralized identity management
 
 ### Location Services
+
 - Real-time location tracking
 - State-specific content delivery
 - Emergency alert positioning
@@ -134,12 +149,14 @@ npm run dev
 ## Development
 
 ### Available Scripts
+
 - `npm run dev`: Start development server
 - `npm run build`: Build for production
 - `npm run start`: Start production server
 - `npm run lint`: Run ESLint
 
 ### Environment Variables
+
 See `.env.example` for required environment variables.
 
 ## Contributing

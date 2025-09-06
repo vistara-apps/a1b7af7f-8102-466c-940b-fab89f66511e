@@ -12,9 +12,7 @@ interface NavHeaderProps {
 export function NavHeader({ variant = 'default' }: NavHeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const navClass = variant === 'transparent' 
-    ? 'bg-transparent' 
-    : 'nav-header';
+  const navClass = variant === 'transparent' ? 'bg-transparent' : 'nav-header';
 
   return (
     <nav className={navClass}>
@@ -29,19 +27,31 @@ export function NavHeader({ variant = 'default' }: NavHeaderProps) {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center space-x-6">
-          <a href="#guides" className="text-white hover:text-purple-200 transition-colors duration-200">
+          <a
+            href="#guides"
+            className="text-white hover:text-purple-200 transition-colors duration-200"
+          >
             Guides
           </a>
-          <a href="#rights" className="text-white hover:text-purple-200 transition-colors duration-200">
+          <a
+            href="#rights"
+            className="text-white hover:text-purple-200 transition-colors duration-200"
+          >
             Your Rights
           </a>
-          <a href="#record" className="text-white hover:text-purple-200 transition-colors duration-200">
+          <a
+            href="#record"
+            className="text-white hover:text-purple-200 transition-colors duration-200"
+          >
             Record
           </a>
-          <a href="#alerts" className="text-white hover:text-purple-200 transition-colors duration-200">
+          <a
+            href="#alerts"
+            className="text-white hover:text-purple-200 transition-colors duration-200"
+          >
             Alerts
           </a>
-          
+
           {/* Wallet Connection */}
           <Wallet>
             <ConnectWallet>
@@ -58,7 +68,11 @@ export function NavHeader({ variant = 'default' }: NavHeaderProps) {
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           className="md:hidden text-white hover:text-purple-200 transition-colors duration-200"
         >
-          {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          {isMenuOpen ? (
+            <X className="h-6 w-6" />
+          ) : (
+            <Menu className="h-6 w-6" />
+          )}
         </button>
       </div>
 
@@ -66,35 +80,35 @@ export function NavHeader({ variant = 'default' }: NavHeaderProps) {
       {isMenuOpen && (
         <div className="md:hidden mt-4 pt-4 border-t border-white border-opacity-20">
           <div className="flex flex-col space-y-3">
-            <a 
-              href="#guides" 
+            <a
+              href="#guides"
               className="text-white hover:text-purple-200 transition-colors duration-200 py-2"
               onClick={() => setIsMenuOpen(false)}
             >
               Guides
             </a>
-            <a 
-              href="#rights" 
+            <a
+              href="#rights"
               className="text-white hover:text-purple-200 transition-colors duration-200 py-2"
               onClick={() => setIsMenuOpen(false)}
             >
               Your Rights
             </a>
-            <a 
-              href="#record" 
+            <a
+              href="#record"
               className="text-white hover:text-purple-200 transition-colors duration-200 py-2"
               onClick={() => setIsMenuOpen(false)}
             >
               Record
             </a>
-            <a 
-              href="#alerts" 
+            <a
+              href="#alerts"
               className="text-white hover:text-purple-200 transition-colors duration-200 py-2"
               onClick={() => setIsMenuOpen(false)}
             >
               Alerts
             </a>
-            
+
             {/* Mobile Wallet Connection */}
             <div className="pt-2">
               <Wallet>

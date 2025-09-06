@@ -1,7 +1,15 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { AlertTriangle, MapPin, Phone, Mail, Plus, X, Send } from 'lucide-react';
+import {
+  AlertTriangle,
+  MapPin,
+  Phone,
+  Mail,
+  Plus,
+  X,
+  Send,
+} from 'lucide-react';
 import { AlertContact } from '@/lib/types';
 import { getCurrentLocation } from '@/lib/utils';
 import { useApp } from '@/lib/context/AppContext';
@@ -12,7 +20,10 @@ interface AlertSystemProps {
   onContactsChange?: (contacts: AlertContact[]) => void;
 }
 
-export function AlertSystem({ contacts = [], onContactsChange }: AlertSystemProps) {
+export function AlertSystem({
+  contacts = [],
+  onContactsChange,
+}: AlertSystemProps) {
   const { sendAlert: sendEmergencyAlertViaContext } = useApp();
   const [alertContacts, setAlertContacts] = useState<AlertContact[]>(contacts);
   const [isAddingContact, setIsAddingContact] = useState(false);
@@ -20,10 +31,13 @@ export function AlertSystem({ contacts = [], onContactsChange }: AlertSystemProp
     name: '',
     phone: '',
     email: '',
-    relationship: ''
+    relationship: '',
   });
   const [isLocationEnabled, setIsLocationEnabled] = useState(false);
-  const [currentLocation, setCurrentLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [currentLocation, setCurrentLocation] = useState<{
+    lat: number;
+    lng: number;
+  } | null>(null);
   const [isSendingAlert, setIsSendingAlert] = useState(false);
 
   useEffect(() => {
@@ -33,7 +47,7 @@ export function AlertSystem({ contacts = [], onContactsChange }: AlertSystemProp
         .then((position) => {
           setCurrentLocation({
             lat: position.coords.latitude,
-            lng: position.coords.longitude
+            lng: position.coords.longitude,
           });
           setIsLocationEnabled(true);
         })
@@ -51,20 +65,22 @@ export function AlertSystem({ contacts = [], onContactsChange }: AlertSystemProp
         name: newContact.name,
         phone: newContact.phone || undefined,
         email: newContact.email || undefined,
-        relationship: newContact.relationship
+        relationship: newContact.relationship,
       };
-      
+
       const updatedContacts = [...alertContacts, contact];
       setAlertContacts(updatedContacts);
       onContactsChange?.(updatedContacts);
-      
+
       setNewContact({ name: '', phone: '', email: '', relationship: '' });
       setIsAddingContact(false);
     }
   };
 
   const removeContact = (id: string) => {
-    const updatedContacts = alertContacts.filter(contact => contact.id !== id);
+    const updatedContacts = alertContacts.filter(
+      (contact) => contact.id !== id
+    );
     setAlertContacts(updatedContacts);
     onContactsChange?.(updatedContacts);
   };
@@ -105,16 +121,17 @@ export function AlertSystem({ contacts = [], onContactsChange }: AlertSystemProp
       {/* Location Status */}
       <div className="glass-card-dark p-4">
         <div className="flex items-center space-x-3">
-          <MapPin className={`h-5 w-5 ${isLocationEnabled ? 'text-green-400' : 'text-red-400'}`} />
+          <MapPin
+            className={`h-5 w-5 ${isLocationEnabled ? 'text-green-400' : 'text-red-400'}`}
+          />
           <div>
             <p className="text-white font-medium">
               Location Services: {isLocationEnabled ? 'Enabled' : 'Disabled'}
             </p>
             <p className="text-sm text-gray-300">
-              {isLocationEnabled 
+              {isLocationEnabled
                 ? 'Your location will be shared with emergency contacts'
-                : 'Enable location services to use emergency alerts'
-              }
+                : 'Enable location services to use emergency alerts'}
             </p>
           </div>
         </div>
@@ -135,10 +152,9 @@ export function AlertSystem({ contacts = [], onContactsChange }: AlertSystemProp
         </ActionButton>
         {(!isLocationEnabled || alertContacts.length === 0) && (
           <p className="text-sm text-gray-400 mt-2">
-            {!isLocationEnabled 
+            {!isLocationEnabled
               ? 'Location services required'
-              : 'Add emergency contacts to enable alerts'
-            }
+              : 'Add emergency contacts to enable alerts'}
           </p>
         )}
       </div>
@@ -146,7 +162,9 @@ export function AlertSystem({ contacts = [], onContactsChange }: AlertSystemProp
       {/* Emergency Contacts */}
       <div className="glass-card-dark p-6">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xl font-semibold text-white">Emergency Contacts</h3>
+          <h3 className="text-xl font-semibold text-white">
+            Emergency Contacts
+          </h3>
           <button
             onClick={() => setIsAddingContact(true)}
             className="flex items-center space-x-2 text-purple-300 hover:text-white transition-colors duration-200"
@@ -159,7 +177,7 @@ export function AlertSystem({ contacts = [], onContactsChange }: AlertSystemProp
         {/* Contact List */}
         <div className="space-y-3">
           {alertContacts.map((contact) => (
-            <div 
+            <div
               key={contact.id}
               className="flex items-center justify-between p-3 bg-white bg-opacity-5 rounded-lg"
             >
@@ -180,7 +198,9 @@ export function AlertSystem({ contacts = [], onContactsChange }: AlertSystemProp
                   )}
                 </div>
                 {contact.relationship && (
-                  <p className="text-xs text-purple-200">{contact.relationship}</p>
+                  <p className="text-xs text-purple-200">
+                    {contact.relationship}
+                  </p>
                 )}
               </div>
               <button
@@ -204,34 +224,44 @@ export function AlertSystem({ contacts = [], onContactsChange }: AlertSystemProp
         {/* Add Contact Form */}
         {isAddingContact && (
           <div className="mt-6 p-4 bg-white bg-opacity-5 rounded-lg border border-white border-opacity-10">
-            <h4 className="text-lg font-medium text-white mb-4">Add Emergency Contact</h4>
+            <h4 className="text-lg font-medium text-white mb-4">
+              Add Emergency Contact
+            </h4>
             <div className="space-y-3">
               <input
                 type="text"
                 placeholder="Name *"
                 value={newContact.name}
-                onChange={(e) => setNewContact({ ...newContact, name: e.target.value })}
+                onChange={(e) =>
+                  setNewContact({ ...newContact, name: e.target.value })
+                }
                 className="w-full px-3 py-2 bg-white bg-opacity-10 border border-white border-opacity-20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
               />
               <input
                 type="tel"
                 placeholder="Phone Number"
                 value={newContact.phone}
-                onChange={(e) => setNewContact({ ...newContact, phone: e.target.value })}
+                onChange={(e) =>
+                  setNewContact({ ...newContact, phone: e.target.value })
+                }
                 className="w-full px-3 py-2 bg-white bg-opacity-10 border border-white border-opacity-20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
               />
               <input
                 type="email"
                 placeholder="Email Address"
                 value={newContact.email}
-                onChange={(e) => setNewContact({ ...newContact, email: e.target.value })}
+                onChange={(e) =>
+                  setNewContact({ ...newContact, email: e.target.value })
+                }
                 className="w-full px-3 py-2 bg-white bg-opacity-10 border border-white border-opacity-20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
               />
               <input
                 type="text"
                 placeholder="Relationship (e.g., Family, Friend, Lawyer)"
                 value={newContact.relationship}
-                onChange={(e) => setNewContact({ ...newContact, relationship: e.target.value })}
+                onChange={(e) =>
+                  setNewContact({ ...newContact, relationship: e.target.value })
+                }
                 className="w-full px-3 py-2 bg-white bg-opacity-10 border border-white border-opacity-20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
               />
             </div>
@@ -239,7 +269,9 @@ export function AlertSystem({ contacts = [], onContactsChange }: AlertSystemProp
               <ActionButton
                 variant="primary"
                 onClick={addContact}
-                disabled={!newContact.name || (!newContact.phone && !newContact.email)}
+                disabled={
+                  !newContact.name || (!newContact.phone && !newContact.email)
+                }
               >
                 Add Contact
               </ActionButton>
@@ -247,7 +279,12 @@ export function AlertSystem({ contacts = [], onContactsChange }: AlertSystemProp
                 variant="secondary"
                 onClick={() => {
                   setIsAddingContact(false);
-                  setNewContact({ name: '', phone: '', email: '', relationship: '' });
+                  setNewContact({
+                    name: '',
+                    phone: '',
+                    email: '',
+                    relationship: '',
+                  });
                 }}
               >
                 Cancel

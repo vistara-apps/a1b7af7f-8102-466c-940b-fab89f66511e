@@ -20,11 +20,7 @@
       "https://a1b7af7f8102466c940bfab89f66511e-wvap.vercel.app/screenshot.png"
     ],
     "primaryCategory": "social",
-    "tags": [
-      "base",
-      "miniapp",
-      "onchainkit"
-    ],
+    "tags": ["base", "miniapp", "onchainkit"],
     "webhookUrl": "https://a1b7af7f8102466c940bfab89f66511e-wvap.vercel.app/api/webhook"
   }
 }

@@ -7,8 +7,10 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'KnowYourRightsCard - Instant Legal Guidance',
-  description: 'Mobile-first app providing instant, understandable legal guidance and documentation tools for citizens encountering law enforcement.',
-  keywords: 'legal rights, police encounters, constitutional rights, legal guidance, citizen rights',
+  description:
+    'Mobile-first app providing instant, understandable legal guidance and documentation tools for citizens encountering law enforcement.',
+  keywords:
+    'legal rights, police encounters, constitutional rights, legal guidance, citizen rights',
   authors: [{ name: 'KnowYourRightsCard Team' }],
 };
 
@@ -25,9 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Providers>
-          {children}
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

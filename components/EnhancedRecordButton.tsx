@@ -3,7 +3,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Mic, MicOff, Square, Play, Pause, Download } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { formatDuration, isAudioRecordingSupported, startAudioRecording } from '@/lib/utils';
+import {
+  formatDuration,
+  isAudioRecordingSupported,
+  startAudioRecording,
+} from '@/lib/utils';
 import { useApp } from '@/lib/context/AppContext';
 import toast from 'react-hot-toast';
 
@@ -12,16 +16,21 @@ interface EnhancedRecordButtonProps {
   className?: string;
 }
 
-export function EnhancedRecordButton({ onRecordingComplete, className = '' }: EnhancedRecordButtonProps) {
+export function EnhancedRecordButton({
+  onRecordingComplete,
+  className = '',
+}: EnhancedRecordButtonProps) {
   const { state, startRecording, stopRecording } = useApp();
   const { recordingState } = state;
-  
-  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
+
+  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(
+    null
+  );
   const [audioChunks, setAudioChunks] = useState<Blob[]>([]);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [recordingSupported, setRecordingSupported] = useState(true);
-  
+
   const audioRef = useRef<HTMLAudioElement>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -64,7 +73,7 @@ export function EnhancedRecordButton({ onRecordingComplete, className = '' }: En
       }
 
       const chunks: Blob[] = [];
-      
+
       recorder.ondataavailable = (event) => {
         if (event.data.size > 0) {
           chunks.push(event.data);
@@ -74,10 +83,10 @@ export function EnhancedRecordButton({ onRecordingComplete, className = '' }: En
       recorder.onstop = () => {
         const audioBlob = new Blob(chunks, { type: 'audio/webm' });
         const url = URL.createObjectURL(audioBlob);
-        
+
         setAudioChunks(chunks);
         setAudioUrl(url);
-        
+
         if (onRecordingComplete) {
           onRecordingComplete(audioBlob, recordingState.duration);
         }
@@ -86,21 +95,22 @@ export function EnhancedRecordButton({ onRecordingComplete, className = '' }: En
       recorder.start(1000); // Collect data every second
       setMediaRecorder(recorder);
       await startRecording();
-      
     } catch (error) {
       console.error('Error starting recording:', error);
-      toast.error('Failed to start recording. Please check microphone permissions.');
+      toast.error(
+        'Failed to start recording. Please check microphone permissions.'
+      );
     }
   };
 
   const handleStopRecording = async () => {
     if (mediaRecorder && mediaRecorder.state === 'recording') {
       mediaRecorder.stop();
-      
+
       // Stop all tracks to release microphone
-      mediaRecorder.stream.getTracks().forEach(track => track.stop());
+      mediaRecorder.stream.getTracks().forEach((track) => track.stop());
     }
-    
+
     await stopRecording();
     setMediaRecorder(null);
   };
@@ -126,7 +136,7 @@ export function EnhancedRecordButton({ onRecordingComplete, className = '' }: En
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-    
+
     toast.success('Recording downloaded');
   };
 
@@ -150,7 +160,11 @@ export function EnhancedRecordButton({ onRecordingComplete, className = '' }: En
       {/* Main Record Button */}
       <div className="relative">
         <motion.button
-          onClick={recordingState.isRecording ? handleStopRecording : handleStartRecording}
+          onClick={
+            recordingState.isRecording
+              ? handleStopRecording
+              : handleStartRecording
+          }
           className={`relative w-32 h-32 rounded-full flex items-center justify-center transition-all duration-300 ${
             recordingState.isRecording
               ? 'bg-red-500 hover:bg-red-600 shadow-lg shadow-red-500/30'
@@ -182,7 +196,7 @@ export function EnhancedRecordButton({ onRecordingComplete, className = '' }: En
               </motion.div>
             )}
           </AnimatePresence>
-          
+
           {/* Recording pulse animation */}
           {recordingState.isRecording && (
             <motion.div
@@ -194,7 +208,7 @@ export function EnhancedRecordButton({ onRecordingComplete, className = '' }: En
               transition={{
                 duration: 2,
                 repeat: Infinity,
-                ease: "easeInOut",
+                ease: 'easeInOut',
               }}
             />
           )}
@@ -206,7 +220,7 @@ export function EnhancedRecordButton({ onRecordingComplete, className = '' }: En
         <div className="text-2xl font-mono text-white">
           {formatDuration(recordingState.duration)}
         </div>
-        
+
         <div className="text-sm text-gray-300">
           {recordingState.isRecording ? (
             <div className="flex items-center justify-center space-x-2">
@@ -240,7 +254,7 @@ export function EnhancedRecordButton({ onRecordingComplete, className = '' }: En
                 <Play className="h-5 w-5 text-white ml-1" />
               )}
             </button>
-            
+
             <button
               onClick={handleDownload}
               className="flex items-center justify-center w-12 h-12 bg-green-500 hover:bg-green-600 rounded-full transition-colors"
@@ -266,9 +280,8 @@ export function EnhancedRecordButton({ onRecordingComplete, className = '' }: En
       <div className="text-xs text-gray-400 max-w-md mx-auto">
         <p>
           {recordingState.isRecording
-            ? "Keep your device steady and speak clearly. Tap the square to stop recording."
-            : "Your recording will be saved locally and can be downloaded for your records."
-          }
+            ? 'Keep your device steady and speak clearly. Tap the square to stop recording.'
+            : 'Your recording will be saved locally and can be downloaded for your records.'}
         </p>
       </div>
     </div>

@@ -16,10 +16,7 @@ export default function Error({
         <p className="text-gray-300 mb-6">
           We encountered an error while loading the app. Please try again.
         </p>
-        <button
-          onClick={reset}
-          className="btn-primary"
-        >
+        <button onClick={reset} className="btn-primary">
           Try again
         </button>
       </div>

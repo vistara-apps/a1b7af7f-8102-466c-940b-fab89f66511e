@@ -9,19 +9,21 @@ import { getCurrentLocation } from '@/lib/utils';
 export function QuickActions() {
   const [isRecording, setIsRecording] = useState(false);
   const [recordingDuration, setRecordingDuration] = useState(0);
-  const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [location, setLocation] = useState<{ lat: number; lng: number } | null>(
+    null
+  );
   const [alertSent, setAlertSent] = useState(false);
 
   // Recording timer
   useEffect(() => {
     let interval: NodeJS.Timeout;
-    
+
     if (isRecording) {
       interval = setInterval(() => {
-        setRecordingDuration(prev => prev + 1);
+        setRecordingDuration((prev) => prev + 1);
       }, 1000);
     }
-    
+
     return () => {
       if (interval) clearInterval(interval);
     };
@@ -32,10 +34,13 @@ export function QuickActions() {
       // Start recording
       try {
         const locationData = await getCurrentLocation();
-        setLocation({ lat: locationData.coords.latitude, lng: locationData.coords.longitude });
+        setLocation({
+          lat: locationData.coords.latitude,
+          lng: locationData.coords.longitude,
+        });
         setRecordingDuration(0);
         setIsRecording(true);
-        
+
         // In a real app, you would start actual audio/video recording here
         console.log('Recording started at:', locationData);
       } catch (error) {
@@ -48,7 +53,7 @@ export function QuickActions() {
       // Stop recording
       setIsRecording(false);
       console.log('Recording stopped. Duration:', recordingDuration, 'seconds');
-      
+
       // In a real app, you would save the recording and generate a summary
     }
   };
@@ -56,12 +61,15 @@ export function QuickActions() {
   const handleSendAlert = async () => {
     try {
       const locationData = await getCurrentLocation();
-      setLocation({ lat: locationData.coords.latitude, lng: locationData.coords.longitude });
+      setLocation({
+        lat: locationData.coords.latitude,
+        lng: locationData.coords.longitude,
+      });
       setAlertSent(true);
-      
+
       // In a real app, you would send alerts to emergency contacts
       console.log('Alert sent with location:', locationData);
-      
+
       // Reset alert status after 3 seconds
       setTimeout(() => setAlertSent(false), 3000);
     } catch (error) {
@@ -79,7 +87,7 @@ export function QuickActions() {
       <h2 className="text-2xl font-bold text-white mb-6 text-center">
         Quick Actions
       </h2>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Recording Section */}
         <div className="text-center">
@@ -124,9 +132,7 @@ export function QuickActions() {
             <Phone className="h-5 w-5" />
             Call 911
           </ActionButton>
-          <p className="text-gray-300 text-sm mt-2">
-            Direct emergency line
-          </p>
+          <p className="text-gray-300 text-sm mt-2">Direct emergency line</p>
         </div>
       </div>
 
@@ -136,7 +142,8 @@ export function QuickActions() {
           <div className="flex items-center space-x-2 text-green-300">
             <MapPin className="h-4 w-4" />
             <span className="text-sm">
-              Location captured: {location.lat.toFixed(4)}, {location.lng.toFixed(4)}
+              Location captured: {location.lat.toFixed(4)},{' '}
+              {location.lng.toFixed(4)}
             </span>
           </div>
         </div>

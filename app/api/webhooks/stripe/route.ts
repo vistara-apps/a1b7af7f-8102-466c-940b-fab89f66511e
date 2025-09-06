@@ -20,10 +20,7 @@ export async function POST(request: NextRequest) {
     event = stripeHelpers.constructEvent(body, signature);
   } catch (error) {
     console.error('Webhook signature verification failed:', error);
-    return NextResponse.json(
-      { error: 'Invalid signature' },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
   }
 
   try {
@@ -32,7 +29,7 @@ export async function POST(request: NextRequest) {
       case 'customer.subscription.updated': {
         const subscription = event.data.object;
         const customerId = subscription.customer as string;
-        
+
         // Get customer to find userId
         const customer = await stripeHelpers.getCustomer(customerId);
         const userId = (customer as any).metadata?.userId;
@@ -43,47 +40,63 @@ export async function POST(request: NextRequest) {
         }
 
         // Update user subscription status
-        const subscriptionStatus = subscription.status === 'active' || subscription.status === 'trialing' 
-          ? 'premium' 
-          : 'free';
+        const subscriptionStatus =
+          subscription.status === 'active' || subscription.status === 'trialing'
+            ? 'premium'
+            : 'free';
 
         await dbHelpers.updateUser(userId, {
-          subscription_status: subscriptionStatus
+          subscription_status: subscriptionStatus,
         });
 
         // Create or update subscription record
         try {
           // Map Stripe status to our database status
-          const dbStatus = subscription.status === 'paused' ? 'active' : subscription.status;
-          
-          await supabase
-            .from('subscriptions')
-            .upsert({
+          const dbStatus =
+            subscription.status === 'paused' ? 'active' : subscription.status;
+
+          await supabase.from('subscriptions').upsert(
+            {
               id: uuidv4(), // Generate a UUID for our database ID
               user_id: userId,
               stripe_customer_id: customerId,
               stripe_subscription_id: subscription.id,
-              status: dbStatus as 'active' | 'canceled' | 'incomplete' | 'incomplete_expired' | 'past_due' | 'trialing' | 'unpaid',
+              status: dbStatus as
+                | 'active'
+                | 'canceled'
+                | 'incomplete'
+                | 'incomplete_expired'
+                | 'past_due'
+                | 'trialing'
+                | 'unpaid',
               price_id: subscription.items.data[0]?.price.id || '',
-              current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
-              current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
+              current_period_start: new Date(
+                subscription.current_period_start * 1000
+              ).toISOString(),
+              current_period_end: new Date(
+                subscription.current_period_end * 1000
+              ).toISOString(),
               created_at: new Date().toISOString(),
-              updated_at: new Date().toISOString()
-            }, {
-              onConflict: 'stripe_subscription_id'
-            });
+              updated_at: new Date().toISOString(),
+            },
+            {
+              onConflict: 'stripe_subscription_id',
+            }
+          );
         } catch (dbError) {
           console.error('Error upserting subscription:', dbError);
         }
 
-        console.log(`Subscription ${event.type} for user ${userId}: ${subscription.status}`);
+        console.log(
+          `Subscription ${event.type} for user ${userId}: ${subscription.status}`
+        );
         break;
       }
 
       case 'customer.subscription.deleted': {
         const subscription = event.data.object;
         const customerId = subscription.customer as string;
-        
+
         // Get customer to find userId
         const customer = await stripeHelpers.getCustomer(customerId);
         const userId = (customer as any).metadata?.userId;
@@ -95,7 +108,7 @@ export async function POST(request: NextRequest) {
 
         // Update user to free tier
         await dbHelpers.updateUser(userId, {
-          subscription_status: 'free'
+          subscription_status: 'free',
         });
 
         // Update subscription record
@@ -104,7 +117,7 @@ export async function POST(request: NextRequest) {
             .from('subscriptions')
             .update({
               status: 'canceled',
-              updated_at: new Date().toISOString()
+              updated_at: new Date().toISOString(),
             })
             .eq('stripe_subscription_id', subscription.id);
         } catch (dbError) {
@@ -118,7 +131,7 @@ export async function POST(request: NextRequest) {
       case 'invoice.payment_succeeded': {
         const invoice = event.data.object;
         const customerId = invoice.customer as string;
-        
+
         // Get customer to find userId
         const customer = await stripeHelpers.getCustomer(customerId);
         const userId = (customer as any).metadata?.userId;
@@ -128,14 +141,16 @@ export async function POST(request: NextRequest) {
           break;
         }
 
-        console.log(`Payment succeeded for user ${userId}: $${invoice.amount_paid / 100}`);
+        console.log(
+          `Payment succeeded for user ${userId}: $${invoice.amount_paid / 100}`
+        );
         break;
       }
 
       case 'invoice.payment_failed': {
         const invoice = event.data.object;
         const customerId = invoice.customer as string;
-        
+
         // Get customer to find userId
         const customer = await stripeHelpers.getCustomer(customerId);
         const userId = (customer as any).metadata?.userId;
@@ -146,14 +161,16 @@ export async function POST(request: NextRequest) {
         }
 
         // Optionally downgrade user or send notification
-        console.log(`Payment failed for user ${userId}: $${invoice.amount_due / 100}`);
+        console.log(
+          `Payment failed for user ${userId}: $${invoice.amount_due / 100}`
+        );
         break;
       }
 
       case 'checkout.session.completed': {
         const session = event.data.object;
         const customerId = session.customer as string;
-        
+
         // Get customer to find userId
         const customer = await stripeHelpers.getCustomer(customerId);
         const userId = (customer as any).metadata?.userId;

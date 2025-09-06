@@ -55,45 +55,51 @@ export const US_STATES = [
 // Basic constitutional rights
 export const BASIC_RIGHTS = [
   {
-    title: "Right to Remain Silent",
-    content: "You have the right to remain silent. Anything you say can and will be used against you in a court of law.",
-    script: "I am exercising my right to remain silent."
+    title: 'Right to Remain Silent',
+    content:
+      'You have the right to remain silent. Anything you say can and will be used against you in a court of law.',
+    script: 'I am exercising my right to remain silent.',
   },
   {
-    title: "Right to an Attorney",
-    content: "You have the right to an attorney. If you cannot afford an attorney, one will be provided for you.",
-    script: "I want to speak to my attorney before answering any questions."
+    title: 'Right to an Attorney',
+    content:
+      'You have the right to an attorney. If you cannot afford an attorney, one will be provided for you.',
+    script: 'I want to speak to my attorney before answering any questions.',
   },
   {
-    title: "Right to Refuse Searches",
-    content: "You have the right to refuse consent to searches of your person, vehicle, or home without a warrant.",
-    script: "I do not consent to any searches."
+    title: 'Right to Refuse Searches',
+    content:
+      'You have the right to refuse consent to searches of your person, vehicle, or home without a warrant.',
+    script: 'I do not consent to any searches.',
   },
   {
-    title: "Right to Leave",
-    content: "If you are not under arrest, you have the right to leave. Ask clearly if you are free to go.",
-    script: "Am I free to leave? Am I under arrest?"
-  }
+    title: 'Right to Leave',
+    content:
+      'If you are not under arrest, you have the right to leave. Ask clearly if you are free to go.',
+    script: 'Am I free to leave? Am I under arrest?',
+  },
 ];
 
 // Emergency phrases in multiple languages
 export const EMERGENCY_PHRASES = {
   en: {
-    recording: "I am recording this interaction for my safety and legal protection.",
-    silent: "I am exercising my right to remain silent.",
-    attorney: "I want to speak to my attorney.",
-    search: "I do not consent to any searches.",
-    leave: "Am I free to leave?",
-    medical: "I need medical attention.",
-    emergency: "This is an emergency. Please send help to my location."
+    recording:
+      'I am recording this interaction for my safety and legal protection.',
+    silent: 'I am exercising my right to remain silent.',
+    attorney: 'I want to speak to my attorney.',
+    search: 'I do not consent to any searches.',
+    leave: 'Am I free to leave?',
+    medical: 'I need medical attention.',
+    emergency: 'This is an emergency. Please send help to my location.',
   },
   es: {
-    recording: "Estoy grabando esta interacción para mi seguridad y protección legal.",
-    silent: "Estoy ejerciendo mi derecho a permanecer en silencio.",
-    attorney: "Quiero hablar con mi abogado.",
-    search: "No consiento a ningún registro.",
-    leave: "¿Soy libre de irme?",
-    medical: "Necesito atención médica.",
-    emergency: "Esta es una emergencia. Por favor envíen ayuda a mi ubicación."
-  }
+    recording:
+      'Estoy grabando esta interacción para mi seguridad y protección legal.',
+    silent: 'Estoy ejerciendo mi derecho a permanecer en silencio.',
+    attorney: 'Quiero hablar con mi abogado.',
+    search: 'No consiento a ningún registro.',
+    leave: '¿Soy libre de irme?',
+    medical: 'Necesito atención médica.',
+    emergency: 'Esta es una emergencia. Por favor envíen ayuda a mi ubicación.',
+  },
 };

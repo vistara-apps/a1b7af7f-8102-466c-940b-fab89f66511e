@@ -9,7 +9,10 @@ interface RightsGuideProps {
   userIsPremium?: boolean;
 }
 
-export function RightsGuide({ language = 'en', userIsPremium = false }: RightsGuideProps) {
+export function RightsGuide({
+  language = 'en',
+  userIsPremium = false,
+}: RightsGuideProps) {
   const [copiedScript, setCopiedScript] = useState<string | null>(null);
   const [selectedRight, setSelectedRight] = useState<number | null>(null);
 
@@ -44,32 +47,31 @@ export function RightsGuide({ language = 'en', userIsPremium = false }: RightsGu
           </h2>
         </div>
         <p className="text-purple-200">
-          {language === 'es' 
+          {language === 'es'
             ? 'Información esencial sobre tus derechos constitucionales'
-            : 'Essential information about your constitutional rights'
-          }
+            : 'Essential information about your constitutional rights'}
         </p>
       </div>
 
       {/* Basic Rights Cards */}
       <div className="grid gap-4">
         {BASIC_RIGHTS.map((right, index) => (
-          <div 
+          <div
             key={index}
             className={`glass-card-dark p-4 cursor-pointer transition-all duration-200 ${
               selectedRight === index ? 'ring-2 ring-purple-400' : ''
             }`}
-            onClick={() => setSelectedRight(selectedRight === index ? null : index)}
+            onClick={() =>
+              setSelectedRight(selectedRight === index ? null : index)
+            }
           >
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <h3 className="text-lg font-semibold text-white mb-2">
                   {right.title}
                 </h3>
-                <p className="text-gray-300 text-sm mb-3">
-                  {right.content}
-                </p>
-                
+                <p className="text-gray-300 text-sm mb-3">{right.content}</p>
+
                 {selectedRight === index && (
                   <div className="mt-4 p-3 bg-purple-500 bg-opacity-20 rounded-lg border border-purple-400 border-opacity-30">
                     <div className="flex items-center justify-between mb-2">
@@ -101,9 +103,7 @@ export function RightsGuide({ language = 'en', userIsPremium = false }: RightsGu
                         </button>
                       </div>
                     </div>
-                    <p className="text-white font-medium">
-                      "{right.script}"
-                    </p>
+                    <p className="text-white font-medium">"{right.script}"</p>
                   </div>
                 )}
               </div>
@@ -119,13 +119,11 @@ export function RightsGuide({ language = 'en', userIsPremium = false }: RightsGu
         </h3>
         <div className="grid gap-3">
           {Object.entries(phrases).map(([key, phrase]) => (
-            <div 
+            <div
               key={key}
               className="flex items-center justify-between p-3 bg-white bg-opacity-5 rounded-lg hover:bg-opacity-10 transition-all duration-200"
             >
-              <span className="text-gray-200 flex-1">
-                "{phrase}"
-              </span>
+              <span className="text-gray-200 flex-1">"{phrase}"</span>
               <div className="flex items-center space-x-2 ml-4">
                 <button
                   onClick={() => speakText(phrase)}
@@ -153,13 +151,14 @@ export function RightsGuide({ language = 'en', userIsPremium = false }: RightsGu
       {!userIsPremium && (
         <div className="glass-card-dark p-6 text-center">
           <h3 className="text-lg font-semibold text-white mb-2">
-            {language === 'es' ? 'Desbloquea Más Funciones' : 'Unlock More Features'}
+            {language === 'es'
+              ? 'Desbloquea Más Funciones'
+              : 'Unlock More Features'}
           </h3>
           <p className="text-gray-300 mb-4">
-            {language === 'es' 
+            {language === 'es'
               ? 'Obtén guías específicas por estado, scripts avanzados y más'
-              : 'Get state-specific guides, advanced scripts, and more'
-            }
+              : 'Get state-specific guides, advanced scripts, and more'}
           </p>
           <button className="btn-primary">
             {language === 'es' ? 'Actualizar a Premium' : 'Upgrade to Premium'}

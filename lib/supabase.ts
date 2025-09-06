@@ -10,13 +10,13 @@ const createSupabaseClient = () => {
     // Return a mock client for build time
     return null as any;
   }
-  
+
   return createClient<Database>(supabaseUrl, supabaseAnonKey, {
     auth: {
       autoRefreshToken: true,
       persistSession: true,
-      detectSessionInUrl: true
-    }
+      detectSessionInUrl: true,
+    },
   });
 };
 
@@ -25,7 +25,9 @@ export const supabase = createSupabaseClient();
 // Helper to check if Supabase is available
 const checkSupabase = () => {
   if (!supabase) {
-    throw new Error('Supabase is not configured. Please set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY environment variables.');
+    throw new Error(
+      'Supabase is not configured. Please set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY environment variables.'
+    );
   }
 };
 
@@ -39,7 +41,7 @@ export const dbHelpers = {
       .insert(user)
       .select()
       .single();
-    
+
     if (error) throw error;
     return data;
   },
@@ -51,31 +53,36 @@ export const dbHelpers = {
       .select('*')
       .eq('user_id', userId)
       .single();
-    
+
     if (error && error.code !== 'PGRST116') throw error;
     return data;
   },
 
-  async updateUser(userId: string, updates: Database['public']['Tables']['users']['Update']) {
+  async updateUser(
+    userId: string,
+    updates: Database['public']['Tables']['users']['Update']
+  ) {
     const { data, error } = await supabase
       .from('users')
       .update(updates)
       .eq('user_id', userId)
       .select()
       .single();
-    
+
     if (error) throw error;
     return data;
   },
 
   // Encounter operations
-  async createEncounter(encounter: Database['public']['Tables']['encounters']['Insert']) {
+  async createEncounter(
+    encounter: Database['public']['Tables']['encounters']['Insert']
+  ) {
     const { data, error } = await supabase
       .from('encounters')
       .insert(encounter)
       .select()
       .single();
-    
+
     if (error) throw error;
     return data;
   },
@@ -86,50 +93,53 @@ export const dbHelpers = {
       .select('*')
       .eq('user_id', userId)
       .order('timestamp', { ascending: false });
-    
+
     if (error) throw error;
     return data;
   },
 
-  async updateEncounter(encounterId: string, updates: Database['public']['Tables']['encounters']['Update']) {
+  async updateEncounter(
+    encounterId: string,
+    updates: Database['public']['Tables']['encounters']['Update']
+  ) {
     const { data, error } = await supabase
       .from('encounters')
       .update(updates)
       .eq('encounter_id', encounterId)
       .select()
       .single();
-    
+
     if (error) throw error;
     return data;
   },
 
   // Legal guide operations
   async getLegalGuides(state?: string, language?: 'en' | 'es') {
-    let query = supabase
-      .from('legal_guides')
-      .select('*');
-    
+    let query = supabase.from('legal_guides').select('*');
+
     if (state) {
       query = query.eq('state', state);
     }
-    
+
     if (language) {
       query = query.eq('language', language);
     }
-    
+
     const { data, error } = await query.order('title');
-    
+
     if (error) throw error;
     return data;
   },
 
-  async createLegalGuide(guide: Database['public']['Tables']['legal_guides']['Insert']) {
+  async createLegalGuide(
+    guide: Database['public']['Tables']['legal_guides']['Insert']
+  ) {
     const { data, error } = await supabase
       .from('legal_guides')
       .insert(guide)
       .select()
       .single();
-    
+
     if (error) throw error;
     return data;
   },
@@ -141,30 +151,35 @@ export const dbHelpers = {
       .select('*')
       .eq('user_id', userId)
       .order('name');
-    
+
     if (error) throw error;
     return data;
   },
 
-  async createAlertContact(contact: Database['public']['Tables']['alert_contacts']['Insert']) {
+  async createAlertContact(
+    contact: Database['public']['Tables']['alert_contacts']['Insert']
+  ) {
     const { data, error } = await supabase
       .from('alert_contacts')
       .insert(contact)
       .select()
       .single();
-    
+
     if (error) throw error;
     return data;
   },
 
-  async updateAlertContact(contactId: string, updates: Database['public']['Tables']['alert_contacts']['Update']) {
+  async updateAlertContact(
+    contactId: string,
+    updates: Database['public']['Tables']['alert_contacts']['Update']
+  ) {
     const { data, error } = await supabase
       .from('alert_contacts')
       .update(updates)
       .eq('id', contactId)
       .select()
       .single();
-    
+
     if (error) throw error;
     return data;
   },
@@ -174,7 +189,7 @@ export const dbHelpers = {
       .from('alert_contacts')
       .delete()
       .eq('id', contactId);
-    
+
     if (error) throw error;
-  }
+  },
 };

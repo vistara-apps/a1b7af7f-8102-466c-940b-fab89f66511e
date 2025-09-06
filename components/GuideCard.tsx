@@ -11,22 +11,22 @@ interface GuideCardProps {
   userIsPremium?: boolean;
 }
 
-export function GuideCard({ 
-  guide, 
-  variant = 'preview', 
+export function GuideCard({
+  guide,
+  variant = 'preview',
   onUpgrade,
-  userIsPremium = false 
+  userIsPremium = false,
 }: GuideCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
-  
+
   const canAccess = !guide.isPremium || userIsPremium;
-  
+
   const handleClick = () => {
     if (!canAccess && onUpgrade) {
       onUpgrade();
       return;
     }
-    
+
     if (variant === 'preview') {
       setIsExpanded(!isExpanded);
     }
@@ -46,7 +46,7 @@ export function GuideCard({
   };
 
   return (
-    <div 
+    <div
       className={`guide-card ${variant === 'preview' ? 'cursor-pointer' : ''}`}
       onClick={handleClick}
     >
@@ -58,11 +58,9 @@ export function GuideCard({
               <h3 className="text-lg font-semibold text-white">
                 {guide.title}
               </h3>
-              {guide.isPremium && (
-                <Lock className="h-4 w-4 text-yellow-400" />
-              )}
+              {guide.isPremium && <Lock className="h-4 w-4 text-yellow-400" />}
             </div>
-            
+
             <div className="flex items-center space-x-2 mb-3">
               <span className="text-sm text-purple-200 bg-purple-500 bg-opacity-30 px-2 py-1 rounded">
                 {guide.state}
@@ -84,10 +82,7 @@ export function GuideCard({
                 <p className="text-gray-300 mb-4">
                   This guide requires a premium subscription
                 </p>
-                <button 
-                  onClick={onUpgrade}
-                  className="btn-primary"
-                >
+                <button onClick={onUpgrade} className="btn-primary">
                   Upgrade to Premium
                 </button>
               </div>
@@ -96,10 +91,10 @@ export function GuideCard({
         </div>
 
         {variant === 'preview' && (
-          <ChevronRight 
+          <ChevronRight
             className={`h-5 w-5 text-gray-400 transition-transform duration-200 ${
               isExpanded ? 'rotate-90' : ''
-            }`} 
+            }`}
           />
         )}
       </div>

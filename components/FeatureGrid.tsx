@@ -13,15 +13,18 @@ export function FeatureGrid() {
             <Shield className="h-6 w-6 text-purple-300" />
           </div>
           <div>
-            <h3 className="text-white text-lg font-semibold">Constitutional Rights</h3>
+            <h3 className="text-white text-lg font-semibold">
+              Constitutional Rights
+            </h3>
             <p className="text-gray-300 text-sm">One-page guides</p>
           </div>
         </div>
-        
+
         <p className="text-gray-200 text-sm mb-4">
-          What to say and what NOT to say during police encounters. Know your constitutional rights and how to assert them safely.
+          What to say and what NOT to say during police encounters. Know your
+          constitutional rights and how to assert them safely.
         </p>
-        
+
         <div className="flex items-center justify-between">
           <button className="text-purple-300 hover:text-purple-200 text-sm font-medium transition-colors duration-200">
             View Guides →

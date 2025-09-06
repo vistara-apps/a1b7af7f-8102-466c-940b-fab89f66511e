@@ -56,7 +56,7 @@ export function getCurrentLocation(): Promise<GeolocationPosition> {
       {
         enableHighAccuracy: true,
         timeout: 15000,
-        maximumAge: 60000
+        maximumAge: 60000,
       }
     );
   });
@@ -83,22 +83,25 @@ export async function getLocationInfo(latitude: number, longitude: number) {
     return {
       latitude,
       longitude,
-      error: 'Unable to determine address'
+      error: 'Unable to determine address',
     };
   }
 }
 
 // Generate encounter summary using AI
-export async function generateEncounterSummary(
-  encounter: {
-    encounterId?: string;
-    userId?: string;
-    timestamp: Date;
-    location: { latitude: number; longitude: number; state?: string; city?: string };
-    duration?: number;
-    additionalNotes?: string;
-  }
-): Promise<string> {
+export async function generateEncounterSummary(encounter: {
+  encounterId?: string;
+  userId?: string;
+  timestamp: Date;
+  location: {
+    latitude: number;
+    longitude: number;
+    state?: string;
+    city?: string;
+  };
+  duration?: number;
+  additionalNotes?: string;
+}): Promise<string> {
   try {
     const response = await fetch('/api/generate-summary', {
       method: 'POST',
@@ -140,7 +143,9 @@ export async function generateLegalScript(
     if (!response.ok) {
       const errorData = await response.json();
       if (response.status === 403) {
-        throw new Error('Premium subscription required for state-specific scripts');
+        throw new Error(
+          'Premium subscription required for state-specific scripts'
+        );
       }
       throw new Error(errorData.error || 'Failed to generate script');
     }
@@ -148,7 +153,7 @@ export async function generateLegalScript(
     const data = await response.json();
     return {
       script: data.script,
-      isPremium: data.isPremium
+      isPremium: data.isPremium,
     };
   } catch (error) {
     console.error('Error generating script:', error);
@@ -159,7 +164,12 @@ export async function generateLegalScript(
 // Send emergency alert with enhanced functionality
 export async function sendEmergencyAlert(
   userId: string,
-  location: { latitude: number; longitude: number; city?: string; state?: string },
+  location: {
+    latitude: number;
+    longitude: number;
+    city?: string;
+    state?: string;
+  },
   contacts: AlertContact[],
   encounterId?: string,
   message?: string
@@ -176,7 +186,13 @@ export async function sendEmergencyAlert(
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ userId, location, contacts, encounterId, message }),
+      body: JSON.stringify({
+        userId,
+        location,
+        contacts,
+        encounterId,
+        message,
+      }),
     });
 
     const data = await response.json();
@@ -189,13 +205,13 @@ export async function sendEmergencyAlert(
       success: true,
       alertId: data.alertId,
       encounterId: data.encounterId,
-      summary: data.summary
+      summary: data.summary,
     };
   } catch (error) {
     console.error('Error sending alert:', error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error'
+      error: error instanceof Error ? error.message : 'Unknown error',
     };
   }
 }
@@ -223,8 +239,13 @@ export async function createSubscription(
   return await response.json();
 }
 
-export async function getSubscriptionPortalUrl(userId: string, returnUrl: string): Promise<string> {
-  const response = await fetch(`/api/create-subscription?userId=${userId}&action=portal&returnUrl=${encodeURIComponent(returnUrl)}`);
+export async function getSubscriptionPortalUrl(
+  userId: string,
+  returnUrl: string
+): Promise<string> {
+  const response = await fetch(
+    `/api/create-subscription?userId=${userId}&action=portal&returnUrl=${encodeURIComponent(returnUrl)}`
+  );
 
   if (!response.ok) {
     const errorData = await response.json();
@@ -306,7 +327,9 @@ export async function startAudioRecording(): Promise<MediaRecorder | null> {
     return mediaRecorder;
   } catch (error) {
     console.error('Error starting audio recording:', error);
-    throw new Error('Failed to start audio recording. Please check microphone permissions.');
+    throw new Error(
+      'Failed to start audio recording. Please check microphone permissions.'
+    );
   }
 }
 
@@ -328,7 +351,7 @@ export function formatDate(date: Date): string {
     month: 'long',
     day: 'numeric',
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
   }).format(date);
 }
 

@@ -26,7 +26,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) {
+    if (
+      latitude < -90 ||
+      latitude > 90 ||
+      longitude < -180 ||
+      longitude > 180
+    ) {
       return NextResponse.json(
         { error: 'Invalid coordinates' },
         { status: 400 }
@@ -40,8 +45,8 @@ export async function POST(request: NextRequest) {
     try {
       const response = await fetch(geocodeUrl, {
         headers: {
-          'User-Agent': 'KnowYourRightsCard/1.0'
-        }
+          'User-Agent': 'KnowYourRightsCard/1.0',
+        },
       });
 
       if (!response.ok) {
@@ -54,7 +59,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({
           error: 'Location not found',
           latitude,
-          longitude
+          longitude,
         });
       }
 
@@ -64,24 +69,67 @@ export async function POST(request: NextRequest) {
         city: address.city || address.town || address.village || address.hamlet,
         state: address.state,
         country: address.country,
-        address: data.display_name
+        address: data.display_name,
       };
 
       // For US locations, try to get more specific state information
-      if (locationInfo.country === 'United States' || address.country_code === 'us') {
+      if (
+        locationInfo.country === 'United States' ||
+        address.country_code === 'us'
+      ) {
         // Map state names to abbreviations if needed
         const stateAbbreviations: { [key: string]: string } = {
-          'Alabama': 'AL', 'Alaska': 'AK', 'Arizona': 'AZ', 'Arkansas': 'AR', 'California': 'CA',
-          'Colorado': 'CO', 'Connecticut': 'CT', 'Delaware': 'DE', 'Florida': 'FL', 'Georgia': 'GA',
-          'Hawaii': 'HI', 'Idaho': 'ID', 'Illinois': 'IL', 'Indiana': 'IN', 'Iowa': 'IA',
-          'Kansas': 'KS', 'Kentucky': 'KY', 'Louisiana': 'LA', 'Maine': 'ME', 'Maryland': 'MD',
-          'Massachusetts': 'MA', 'Michigan': 'MI', 'Minnesota': 'MN', 'Mississippi': 'MS', 'Missouri': 'MO',
-          'Montana': 'MT', 'Nebraska': 'NE', 'Nevada': 'NV', 'New Hampshire': 'NH', 'New Jersey': 'NJ',
-          'New Mexico': 'NM', 'New York': 'NY', 'North Carolina': 'NC', 'North Dakota': 'ND', 'Ohio': 'OH',
-          'Oklahoma': 'OK', 'Oregon': 'OR', 'Pennsylvania': 'PA', 'Rhode Island': 'RI', 'South Carolina': 'SC',
-          'South Dakota': 'SD', 'Tennessee': 'TN', 'Texas': 'TX', 'Utah': 'UT', 'Vermont': 'VT',
-          'Virginia': 'VA', 'Washington': 'WA', 'West Virginia': 'WV', 'Wisconsin': 'WI', 'Wyoming': 'WY',
-          'District of Columbia': 'DC'
+          Alabama: 'AL',
+          Alaska: 'AK',
+          Arizona: 'AZ',
+          Arkansas: 'AR',
+          California: 'CA',
+          Colorado: 'CO',
+          Connecticut: 'CT',
+          Delaware: 'DE',
+          Florida: 'FL',
+          Georgia: 'GA',
+          Hawaii: 'HI',
+          Idaho: 'ID',
+          Illinois: 'IL',
+          Indiana: 'IN',
+          Iowa: 'IA',
+          Kansas: 'KS',
+          Kentucky: 'KY',
+          Louisiana: 'LA',
+          Maine: 'ME',
+          Maryland: 'MD',
+          Massachusetts: 'MA',
+          Michigan: 'MI',
+          Minnesota: 'MN',
+          Mississippi: 'MS',
+          Missouri: 'MO',
+          Montana: 'MT',
+          Nebraska: 'NE',
+          Nevada: 'NV',
+          'New Hampshire': 'NH',
+          'New Jersey': 'NJ',
+          'New Mexico': 'NM',
+          'New York': 'NY',
+          'North Carolina': 'NC',
+          'North Dakota': 'ND',
+          Ohio: 'OH',
+          Oklahoma: 'OK',
+          Oregon: 'OR',
+          Pennsylvania: 'PA',
+          'Rhode Island': 'RI',
+          'South Carolina': 'SC',
+          'South Dakota': 'SD',
+          Tennessee: 'TN',
+          Texas: 'TX',
+          Utah: 'UT',
+          Vermont: 'VT',
+          Virginia: 'VA',
+          Washington: 'WA',
+          'West Virginia': 'WV',
+          Wisconsin: 'WI',
+          Wyoming: 'WY',
+          'District of Columbia': 'DC',
         };
 
         if (locationInfo.state && stateAbbreviations[locationInfo.state]) {
@@ -93,21 +141,19 @@ export async function POST(request: NextRequest) {
         ...locationInfo,
         latitude,
         longitude,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
-
     } catch (geocodeError) {
       console.error('Geocoding error:', geocodeError);
-      
+
       // Return basic location info even if geocoding fails
       return NextResponse.json({
         latitude,
         longitude,
         error: 'Unable to determine address, but coordinates recorded',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
     }
-
   } catch (error) {
     console.error('Location API error:', error);
     return NextResponse.json(
@@ -131,14 +177,16 @@ export async function GET(request: NextRequest) {
   }
 
   // Forward to POST endpoint
-  return POST(new NextRequest(request.url, {
-    method: 'POST',
-    body: JSON.stringify({
-      latitude: parseFloat(lat),
-      longitude: parseFloat(lon)
-    }),
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  }));
+  return POST(
+    new NextRequest(request.url, {
+      method: 'POST',
+      body: JSON.stringify({
+        latitude: parseFloat(lat),
+        longitude: parseFloat(lon),
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+  );
 }
