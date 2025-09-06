@@ -1,25 +1,39 @@
 import { createClient } from '@supabase/supabase-js';
 import { Database } from './database.types';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables');
-}
-
-export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    autoRefreshToken: true,
-    persistSession: true,
-    detectSessionInUrl: true
+// Create a dummy client for build time when env vars are not available
+const createSupabaseClient = () => {
+  if (!supabaseUrl || !supabaseAnonKey) {
+    // Return a mock client for build time
+    return null as any;
   }
-});
+  
+  return createClient<Database>(supabaseUrl, supabaseAnonKey, {
+    auth: {
+      autoRefreshToken: true,
+      persistSession: true,
+      detectSessionInUrl: true
+    }
+  });
+};
+
+export const supabase = createSupabaseClient();
+
+// Helper to check if Supabase is available
+const checkSupabase = () => {
+  if (!supabase) {
+    throw new Error('Supabase is not configured. Please set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY environment variables.');
+  }
+};
 
 // Database helper functions
 export const dbHelpers = {
   // User operations
   async createUser(user: Database['public']['Tables']['users']['Insert']) {
+    checkSupabase();
     const { data, error } = await supabase
       .from('users')
       .insert(user)
@@ -31,6 +45,7 @@ export const dbHelpers = {
   },
 
   async getUser(userId: string) {
+    checkSupabase();
     const { data, error } = await supabase
       .from('users')
       .select('*')
@@ -89,7 +104,7 @@ export const dbHelpers = {
   },
 
   // Legal guide operations
-  async getLegalGuides(state?: string, language?: string) {
+  async getLegalGuides(state?: string, language?: 'en' | 'es') {
     let query = supabase
       .from('legal_guides')
       .select('*');

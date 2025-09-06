@@ -2,10 +2,17 @@ import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
 import { dbHelpers } from '@/lib/supabase';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENROUTER_API_KEY || process.env.OPENAI_API_KEY,
-  baseURL: process.env.OPENROUTER_API_KEY ? "https://openrouter.ai/api/v1" : undefined,
-});
+const createOpenAIClient = () => {
+  const apiKey = process.env.OPENROUTER_API_KEY || process.env.OPENAI_API_KEY;
+  if (!apiKey) {
+    throw new Error('OpenAI API key is required. Please set OPENAI_API_KEY or OPENROUTER_API_KEY environment variable.');
+  }
+  
+  return new OpenAI({
+    apiKey,
+    baseURL: process.env.OPENROUTER_API_KEY ? "https://openrouter.ai/api/v1" : undefined,
+  });
+};
 
 interface ScriptRequest {
   state: string;
@@ -16,6 +23,7 @@ interface ScriptRequest {
 
 export async function POST(request: NextRequest) {
   try {
+    const openai = createOpenAIClient();
     const body: ScriptRequest = await request.json();
     const { state, language, scenario, userIsPremium } = body;
 

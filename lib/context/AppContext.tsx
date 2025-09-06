@@ -163,7 +163,7 @@ export function AppProvider({ children }: AppProviderProps) {
 
   // Initialize app state from localStorage
   useEffect(() => {
-    const savedState = getFromLocalStorage('appState', {});
+    const savedState = getFromLocalStorage('appState', {}) as any;
     
     if (savedState.selectedState) {
       dispatch({ type: 'SET_SELECTED_STATE', payload: savedState.selectedState });
@@ -197,7 +197,16 @@ export function AppProvider({ children }: AppProviderProps) {
         });
       }
       
-      dispatch({ type: 'SET_USER', payload: user });
+      // Map database user to User type
+      const mappedUser: User = {
+        userId: user.user_id,
+        walletAddress: user.wallet_address || undefined,
+        subscriptionStatus: user.subscription_status,
+        preferredLanguage: user.preferred_language,
+        savedStateLaws: user.saved_state_laws
+      };
+      
+      dispatch({ type: 'SET_USER', payload: mappedUser });
       dispatch({ type: 'SET_SELECTED_STATE', payload: user.saved_state_laws[0] || 'CA' });
       
       // Load user data
@@ -219,8 +228,25 @@ export function AppProvider({ children }: AppProviderProps) {
     if (!state.user) return;
     
     try {
-      const updatedUser = await dbHelpers.updateUser(state.user.userId, updates);
-      dispatch({ type: 'SET_USER', payload: updatedUser });
+      // Map User type fields to database field names
+      const dbUpdates: any = {};
+      if (updates.walletAddress !== undefined) dbUpdates.wallet_address = updates.walletAddress;
+      if (updates.subscriptionStatus !== undefined) dbUpdates.subscription_status = updates.subscriptionStatus;
+      if (updates.preferredLanguage !== undefined) dbUpdates.preferred_language = updates.preferredLanguage;
+      if (updates.savedStateLaws !== undefined) dbUpdates.saved_state_laws = updates.savedStateLaws;
+      
+      const updatedUser = await dbHelpers.updateUser(state.user.userId, dbUpdates);
+      
+      // Map database user to User type
+      const mappedUser: User = {
+        userId: updatedUser.user_id,
+        walletAddress: updatedUser.wallet_address || undefined,
+        subscriptionStatus: updatedUser.subscription_status,
+        preferredLanguage: updatedUser.preferred_language,
+        savedStateLaws: updatedUser.saved_state_laws
+      };
+      
+      dispatch({ type: 'SET_USER', payload: mappedUser });
       toast.success('Preferences updated');
     } catch (error) {
       console.error('Error updating user preferences:', error);
@@ -283,8 +309,20 @@ export function AppProvider({ children }: AppProviderProps) {
         alert_sent: false
       });
 
-      dispatch({ type: 'SET_CURRENT_ENCOUNTER', payload: encounter });
-      dispatch({ type: 'ADD_ENCOUNTER', payload: encounter });
+      // Map database encounter to Encounter type
+      const mappedEncounter: Encounter = {
+        encounterId: encounter.encounter_id,
+        userId: encounter.user_id,
+        timestamp: new Date(encounter.timestamp),
+        location: encounter.location as any,
+        recordingUrl: encounter.recording_url || undefined,
+        summary: encounter.summary || undefined,
+        alertSent: encounter.alert_sent,
+        duration: encounter.duration || undefined
+      };
+
+      dispatch({ type: 'SET_CURRENT_ENCOUNTER', payload: mappedEncounter });
+      dispatch({ type: 'ADD_ENCOUNTER', payload: mappedEncounter });
       
       toast.success('Encounter started');
       return encounter.encounter_id;
@@ -305,7 +343,14 @@ export function AppProvider({ children }: AppProviderProps) {
         updates.summary = summary;
       }
 
-      await dbHelpers.updateEncounter(encounterId, updates);
+      // Map Encounter type fields to database field names
+      const dbUpdates: any = {};
+      if (updates.duration !== undefined) dbUpdates.duration = updates.duration;
+      if (updates.summary !== undefined) dbUpdates.summary = updates.summary;
+      if (updates.recordingUrl !== undefined) dbUpdates.recording_url = updates.recordingUrl;
+      if (updates.alertSent !== undefined) dbUpdates.alert_sent = updates.alertSent;
+
+      await dbHelpers.updateEncounter(encounterId, dbUpdates);
       
       dispatch({ type: 'UPDATE_ENCOUNTER', payload: { id: encounterId, updates } });
       dispatch({ type: 'SET_CURRENT_ENCOUNTER', payload: null });
@@ -323,10 +368,16 @@ export function AppProvider({ children }: AppProviderProps) {
     
     try {
       const encounters = await dbHelpers.getEncounters(state.user.userId);
-      // Convert string timestamps to Date objects
-      const processedEncounters = encounters.map(encounter => ({
-        ...encounter,
-        timestamp: new Date(encounter.timestamp)
+      // Convert string timestamps to Date objects and map to Encounter type
+      const processedEncounters = encounters.map((encounter: any) => ({
+        encounterId: encounter.encounter_id,
+        userId: encounter.user_id,
+        timestamp: new Date(encounter.timestamp),
+        location: encounter.location,
+        recordingUrl: encounter.recording_url || undefined,
+        summary: encounter.summary || undefined,
+        alertSent: encounter.alert_sent,
+        duration: encounter.duration || undefined
       }));
       
       dispatch({ type: 'SET_LOADING', payload: false });
@@ -390,7 +441,17 @@ export function AppProvider({ children }: AppProviderProps) {
     
     try {
       const contacts = await dbHelpers.getAlertContacts(state.user.userId);
-      dispatch({ type: 'SET_ALERT_CONTACTS', payload: contacts });
+      
+      // Map database contacts to AlertContact type
+      const mappedContacts: AlertContact[] = contacts.map((contact: any) => ({
+        id: contact.id,
+        name: contact.name,
+        phone: contact.phone || undefined,
+        email: contact.email || undefined,
+        relationship: contact.relationship
+      }));
+      
+      dispatch({ type: 'SET_ALERT_CONTACTS', payload: mappedContacts });
     } catch (error) {
       console.error('Error loading alert contacts:', error);
     }
@@ -406,7 +467,16 @@ export function AppProvider({ children }: AppProviderProps) {
         ...contact
       });
       
-      dispatch({ type: 'ADD_ALERT_CONTACT', payload: newContact });
+      // Map database contact to AlertContact type
+      const mappedContact: AlertContact = {
+        id: newContact.id,
+        name: newContact.name,
+        phone: newContact.phone || undefined,
+        email: newContact.email || undefined,
+        relationship: newContact.relationship
+      };
+      
+      dispatch({ type: 'ADD_ALERT_CONTACT', payload: mappedContact });
       toast.success('Contact added');
     } catch (error) {
       console.error('Error saving alert contact:', error);

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { stripeHelpers, STRIPE_CONFIG } from '@/lib/stripe';
+import { stripe, stripeHelpers, STRIPE_CONFIG } from '@/lib/stripe';
 import { dbHelpers } from '@/lib/supabase';
 
 interface SubscriptionRequest {
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
     
     try {
       // Try to find existing customer by email
-      const existingCustomers = await stripeHelpers.stripe.customers.list({
+      const existingCustomers = await stripe.customers.list({
         email: email,
         limit: 1
       });
@@ -121,7 +121,7 @@ export async function GET(request: NextRequest) {
       const returnUrl = searchParams.get('returnUrl') || `${request.nextUrl.origin}`;
       
       // Find customer by user metadata
-      const customers = await stripeHelpers.stripe.customers.list({
+      const customers = await stripe.customers.list({
         limit: 100
       });
       

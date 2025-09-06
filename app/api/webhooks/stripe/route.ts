@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { stripeHelpers } from '@/lib/stripe';
-import { dbHelpers } from '@/lib/supabase';
+import { supabase, dbHelpers } from '@/lib/supabase';
 import { v4 as uuidv4 } from 'uuid';
 
 export async function POST(request: NextRequest) {
@@ -53,18 +53,24 @@ export async function POST(request: NextRequest) {
 
         // Create or update subscription record
         try {
-          await dbHelpers.supabase
+          // Map Stripe status to our database status
+          const dbStatus = subscription.status === 'paused' ? 'active' : subscription.status;
+          
+          await supabase
             .from('subscriptions')
             .upsert({
-              id: subscription.id,
+              id: uuidv4(), // Generate a UUID for our database ID
               user_id: userId,
               stripe_customer_id: customerId,
               stripe_subscription_id: subscription.id,
-              status: subscription.status,
+              status: dbStatus as 'active' | 'canceled' | 'incomplete' | 'incomplete_expired' | 'past_due' | 'trialing' | 'unpaid',
               price_id: subscription.items.data[0]?.price.id || '',
               current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
               current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
+              created_at: new Date().toISOString(),
               updated_at: new Date().toISOString()
+            }, {
+              onConflict: 'stripe_subscription_id'
             });
         } catch (dbError) {
           console.error('Error upserting subscription:', dbError);
@@ -94,7 +100,7 @@ export async function POST(request: NextRequest) {
 
         // Update subscription record
         try {
-          await dbHelpers.supabase
+          await supabase
             .from('subscriptions')
             .update({
               status: 'canceled',
