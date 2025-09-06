@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { Providers } from './providers';
@@ -10,7 +10,11 @@ export const metadata: Metadata = {
   description: 'Mobile-first app providing instant, understandable legal guidance and documentation tools for citizens encountering law enforcement.',
   keywords: 'legal rights, police encounters, constitutional rights, legal guidance, citizen rights',
   authors: [{ name: 'KnowYourRightsCard Team' }],
-  viewport: 'width=device-width, initial-scale=1',
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
 };
 
 export default function RootLayout({
